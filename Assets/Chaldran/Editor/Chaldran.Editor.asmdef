@@ -1,0 +1,6 @@
+{
+  "name": "Chaldran.Editor",
+  "references": ["Chaldran.Runtime"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

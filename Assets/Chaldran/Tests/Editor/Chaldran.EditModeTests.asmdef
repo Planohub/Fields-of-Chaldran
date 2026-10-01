@@ -1,0 +1,7 @@
+{
+  "name": "Chaldran.EditModeTests",
+  "references": ["Chaldran.Runtime"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

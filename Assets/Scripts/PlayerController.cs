@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 movementInput;
     private float currentMoveSpeed;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         currentMoveSpeed = baseMoveSpeed;
@@ -33,27 +33,27 @@ public class PlayerController : MonoBehaviour
         attackAction.action.Enable();
 
         // Subscribe to action events
-        interactAction.action.performed += ctx => Interact();
-        attackAction.action.performed += ctx => Attack();
+        interactAction.action.performed += OnInteract;
+        attackAction.action.performed += OnAttack;
     }
 
     void OnDisable()
     {
+        // Remove the same delegates that OnEnable registered.
+        interactAction.action.performed -= OnInteract;
+        attackAction.action.performed -= OnAttack;
+
         // Disable inputs when script is deactivated
         moveAction.action.Disable();
         sprintAction.action.Disable();
         interactAction.action.Disable();
         attackAction.action.Disable();
-
-        // Unsubscribe to prevent memory leaks
-        interactAction.action.performed -= ctx => Interact();
-        attackAction.action.performed -= ctx => Attack();
     }
 
     void Update()
     {
         // Read movement values (WASD)
-        movementInput = moveAction.action.ReadValue<Vector2>();
+        movementInput = Vector2.ClampMagnitude(moveAction.action.ReadValue<Vector2>(), 1f);
 
         // Check if sprint is held down
         if (sprintAction.action.IsPressed())
@@ -73,4 +73,6 @@ public class PlayerController : MonoBehaviour
 
     private void Interact() { Debug.Log("Interact with object/NPC"); }
     private void Attack() { Debug.Log("Attack Executed"); }
+    private void OnInteract(InputAction.CallbackContext context) { Interact(); }
+    private void OnAttack(InputAction.CallbackContext context) { Attack(); }
 }

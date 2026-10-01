@@ -1,0 +1,6 @@
+{
+  "name": "Chaldran.Runtime",
+  "rootNamespace": "Chaldran",
+  "references": ["Unity.InputSystem", "Unity.TextMeshPro", "UnityEngine.UI", "Unity.RenderPipelines.Universal.Runtime"],
+  "autoReferenced": true
+}
