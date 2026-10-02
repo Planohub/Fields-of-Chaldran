@@ -6,7 +6,7 @@ namespace Chaldran
     public sealed class PlayerInputRouter : MonoBehaviour
     {
         private InputActionAsset actions;
-        private InputAction move, sprint, interact, attack, block, ability, pause, retry, aim;
+        private InputAction move, sprint, interact, attack, block, ability, pause, retry, aim, resumeCheckpoint, newTrial;
         private PrototypeRun run;
 
         public void Initialize(PrototypeRun owner, InputActionAsset source)
@@ -23,6 +23,8 @@ namespace Chaldran
             pause = actions.FindAction("Player/Pause", true);
             retry = actions.FindAction("Player/Retry", true);
             aim = actions.FindAction("Player/Aim", true);
+            resumeCheckpoint = actions.FindAction("Player/Continue", true);
+            newTrial = actions.FindAction("Player/NewTrial", true);
             if (isActiveAndEnabled) actions.Enable();
         }
 
@@ -38,8 +40,11 @@ namespace Chaldran
         private void Update()
         {
             if (actions == null || run == null) return;
+            if (run.IsTransitioning) return;
+            if (newTrial.WasPressedThisFrame()) { run.NewTrial(); return; }
+            if (resumeCheckpoint.WasPressedThisFrame()) { run.ContinueJourney(); return; }
             if (pause.WasPressedThisFrame()) run.TogglePause();
-            if (retry.WasPressedThisFrame() && (!run.Stats.Vitals.IsAlive || run.Progress.Complete))
+            if (retry.WasPressedThisFrame() && (!run.Stats.Vitals.IsAlive || (!run.IsOverland && run.Progress.Complete)))
             {
                 run.Restart();
                 return;

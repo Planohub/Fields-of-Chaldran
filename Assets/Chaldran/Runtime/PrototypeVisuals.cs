@@ -4,17 +4,19 @@ namespace Chaldran
 {
     public sealed class PrototypeVisuals
     {
-        private readonly Sprite[] sprites = new Sprite[16];
+        private readonly Sprite[] sprites;
         private readonly Material material;
         private readonly Transform root;
 
-        public PrototypeVisuals(Texture2D atlas, Material spriteMaterial, Transform parent)
+        public PrototypeVisuals(PresentationProfile profile, Material spriteMaterial, Transform parent)
         {
+            sprites = new Sprite[profile.columns * profile.rows];
             material = spriteMaterial;
             root = parent;
             for (int i = 0; i < sprites.Length; i++)
-                sprites[i] = Sprite.Create(atlas, new Rect((i % 8) * 16, (1 - i / 8) * 16, 16, 16),
-                    new Vector2(0.5f, 0.5f), 16f, 0, SpriteMeshType.FullRect);
+                sprites[i] = Sprite.Create(profile.atlas, new Rect((i % profile.columns) * profile.cellPixels,
+                    (profile.rows - 1 - i / profile.columns) * profile.cellPixels, profile.cellPixels, profile.cellPixels),
+                    new Vector2(0.5f, 0.5f), profile.cellPixels, 0, SpriteMeshType.FullRect);
         }
 
         public Sprite GetSprite(int index) { return sprites[index]; }

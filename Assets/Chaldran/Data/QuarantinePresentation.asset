@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9fac3d336135b0081e0281c3efb9f4e, type: 3}
+  m_Name: QuarantinePresentation
+  m_EditorClassIdentifier: Chaldran.Runtime::Chaldran.PresentationProfile
+  tier: 0
+  displayName: QUARANTINE // RESTRICTED
+  atlas: {fileID: 2800000, guid: 91a5821b03cd59faa213eb6b1b2fe973, type: 3}
+  cellPixels: 16
+  columns: 8
+  rows: 2
+  bufferWidth: 256
+  bufferHeight: 144
+  background: {r: 0.015, g: 0.025, b: 0.04, a: 1}
+  hudAccent: {r: 0.55, g: 0.85, b: 0.65, a: 1}
+  sounds:
+  - {fileID: 8300000, guid: b25a01de18365b12aed6eca3ec335719, type: 3}
+  - {fileID: 8300000, guid: 814a76867a705c5bb5b8378a3b1fce86, type: 3}
+  - {fileID: 8300000, guid: 1502296c20015cb4ac3473a316f46ba8, type: 3}
+  - {fileID: 8300000, guid: 2e826366ab7057a892881fc5a5a7d22f, type: 3}
+  - {fileID: 8300000, guid: 76a12cb289a156659ff55edc728f16d4, type: 3}
+  - {fileID: 8300000, guid: 96e43e70696059e8b8facb29207129d5, type: 3}
+  music: {fileID: 8300000, guid: c6c9e882a46e5c92a1533550dd61ffe2, type: 3}
+  musicVolume: 0.12
+  walkingFrames: 02000000

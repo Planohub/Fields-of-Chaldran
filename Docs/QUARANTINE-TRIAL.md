@@ -4,7 +4,7 @@
 
 This short development scene adds an actual objective sequence and combat to the project's existing movement foundation. It is a mechanics trial, not the final tutorial or a replacement for the game's AGDD. Existing SampleScene layout and asset GUIDs are preserved.
 
-The avatar begins without a weapon. Interacting with the anomaly enables melee and the Ashen Crown trial ability. A sentinel drops a token when defeated. The token must be collected, the barrier must be opened, and the exit must be activated in that order. There is no persistent save yet; Enter starts a fresh run after death or completion.
+The avatar begins without a weapon. Interacting with the anomaly enables melee and the Ashen Crown trial ability. A sentinel drops a token when defeated. The token must be collected, the barrier must be opened, and the exit must be activated in that order. The exit now unlocks the first overland presentation and saves a post-tutorial checkpoint. Tutorial death still retries a fresh run. See [presentation progression](PRESENTATION-PROGRESSION.md) for the new scene, profiles, save controls, and acceptance checks.
 
 ## Prototype combat rules
 
@@ -44,32 +44,32 @@ The sentinel is a small state machine: dormant, hunting, warning, recovery, defe
 6. Verify the sentinel's warning gives a clear opportunity to move. A frontal block costs Resonance and reduces damage; rear attacks still hurt. Empty Resonance cannot pay for a block. Release block to regenerate.
 7. Cast Q: it spends 20 Resonance, affects nearby visible targets, and cannot repeat until its cooldown ends.
 8. Let the sentinel kill the avatar. Inputs stop affecting gameplay; Enter restarts with full resources and fresh objective state.
-9. Defeat the sentinel. Confirm the token appears once, E collects it, the barrier consumes it and releases collision, and using the exit shows completion. The sequence must not complete early.
-10. Pause during pursuit and during a warning. Movement, attacks, audio, and cooldowns should stop; Escape resumes them. Retry should still work after a completed run.
+9. Defeat the sentinel. Confirm the token appears once, E collects it, the barrier consumes it and releases collision, and using the exit transitions into the overland scene. The sequence must not complete early.
+10. Pause during pursuit and during a warning. Movement, attacks, audio, and cooldowns should stop; Escape resumes them. After reaching overland, F5 starts a fresh tutorial and C resumes the saved checkpoint.
 11. Test 1280×720, 1920×1080, a narrower window, and an ultrawide window. Verify the world preserves aspect ratio and mouse aim maps to the displayed world correctly.
-12. Run the EditMode tests and make a Windows standalone build. QuarantinePrototype is the first enabled build scene; SampleScene remains second. Test the complete build folder outside the Editor, including retry.
+12. Run the EditMode tests and make a Windows standalone build. QuarantinePrototype is the first enabled build scene; OverlandPrototype is second and SampleScene remains available. Test the complete build folder outside the Editor, including retry.
 
 ## Validation already completed
 
 The October 1 recovery copied the earlier session's uncommitted implementation into a separate checkout. The recovered implementation was reviewed and the checks below were rerun. Progression now rejects sentinel defeat before weapon recovery and duplicate defeat notifications; resource regeneration stops while paused or after completion. Retry reloads the active scene by its full path.
 
-- Shipped core test source compiled with Roslyn in C# 9 mode and ran against NUnit 3.14.0: 5 passed, 0 failed.
-- C# syntax parsing: 24 files, no parse errors.
-- Metadata uniqueness and coverage; trial scene GUIDs and scene IDs; build scene entry; preserved original input IDs and valid added bindings; correct layers; atlas size; six unclipped mono 44.1 kHz WAV files.
+- Current combat and checkpoint test sources compiled with Roslyn in C# 9 mode and ran against NUnit 3.14.0: 11 passed, 0 failed.
+- Current C# syntax parsing: 30 files, no parse errors.
+- Metadata uniqueness and coverage; both scene GUIDs and scene IDs; build scene entries; preserved original input IDs and valid added bindings; correct layers; two atlas sizes; fourteen unclipped mono WAV files.
 - Diff whitespace checks and visual inspection of the generated pixel atlas.
 
-These checks do not establish Unity API compilation or runtime behavior. The authoring environment has no Unity Editor. Record the PC playtest and standalone build results before accepting the branch.
+These checks do not establish Unity API compilation or runtime behavior. The authoring environment has no Unity Editor. The user reported the original trial working in Unity on October 1. Record the new transition playtest and standalone build results before accepting the updated branch.
 
 ## Asset pipeline
 
-The atlas contains sixteen 16×16 frames in an 8×2 grid. The runtime creates Sprite objects using those exact rectangles and 16 pixels per world unit. The camera renders 24×13.5 world units into 384×216 pixels; the HUD uses a separate scaled canvas. Rendering is point-filtered, and the camera snaps to the world pixel grid. Scene runtime objects are regenerated for each run; editable parameters live in the balance asset and input action asset.
+The trial atlas contains sixteen 16×16 frames in an 8×2 grid. The runtime creates Sprite objects using the presentation profile's rectangles and pixels per world unit. The camera renders 24×13.5 world units into a 256×144 quarantine buffer or a 512×288 overland buffer; the HUD uses a separate scaled canvas. Rendering is point-filtered, and the camera snaps to the tier's world pixel grid. Scene runtime objects are regenerated for each run; editable parameters live in the balance, presentation, and input action assets. See [presentation progression](PRESENTATION-PROGRESSION.md) for the new 32×32 overland atlas and music pipeline.
 
 Art and six small synthesized effects were created specifically for this prototype. The existing Liberation Sans SDF font is reused with its existing license files. The existing URP package's default 2D unlit material is referenced explicitly so it is available to builds. Blender/Audacity production sources can replace the temporary assets once the perspective, palettes, animation directions, and world scale are locked.
 
 ## After the trial passes
 
 1. Tune combat, then add a small set of meaningful equipment/relic definitions and player animation states.
-2. Add versioned saves and checkpoints for resources, domain, scene, presentation tier, and world permissions.
-3. Build the actual quarantine escape and its presentation transition using persistent progression state.
+2. Expand the new post-tutorial checkpoint into versioned saves for domain, inventory, scene, and world permissions.
+3. Expand the first transition into the canonical quarantine escape using persistent progression state.
 4. Implement the Broken Oracle library's loop anchors, permission rules, relic upgrade, and boss encounter.
 5. Expand the validated art/audio pipeline to the remaining domains and visual tiers.

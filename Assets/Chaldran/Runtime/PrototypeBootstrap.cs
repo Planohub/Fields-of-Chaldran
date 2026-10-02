@@ -10,26 +10,27 @@ namespace Chaldran
     public sealed class PrototypeBootstrap : MonoBehaviour
     {
         [SerializeField] private PrototypeBalance balance;
-        [SerializeField] private Texture2D atlas;
+        [SerializeField] private PresentationProfile presentation;
+        [SerializeField] private bool overland;
         [SerializeField] private TMP_FontAsset font;
         [SerializeField] private Material spriteMaterial;
         [SerializeField] private InputActionAsset playerControls;
-        [SerializeField] private AudioClip[] sounds;
         private Tile floorTile, wallTile;
 
         private void Awake()
         {
-            if (balance == null || atlas == null || font == null || spriteMaterial == null || playerControls == null)
+            if (balance == null || presentation == null || !presentation.IsValid || font == null || spriteMaterial == null || playerControls == null
+                || presentation.tier != (overland ? PresentationTier.Overland : PresentationTier.Quarantine))
             {
                 Debug.LogError("Quarantine Trial is missing a required asset. Open the checked-in QuarantinePrototype scene.", this);
                 enabled = false;
                 return;
             }
-            PrototypeVisuals visuals = new PrototypeVisuals(atlas, spriteMaterial, transform);
+            PrototypeVisuals visuals = new PrototypeVisuals(presentation, spriteMaterial, transform);
             PrototypeRun run = gameObject.AddComponent<PrototypeRun>();
-            run.Initialize(balance, visuals);
+            run.Initialize(balance, visuals, presentation, overland);
             run.Audio = gameObject.AddComponent<PrototypeAudio>();
-            run.Audio.Initialize(sounds);
+            run.Audio.Initialize(presentation);
             BuildWorld(visuals);
 
             GameObject player = visuals.Make("Awakened avatar", new Vector2(-9, -5), 2, Vector2.one);
@@ -44,12 +45,27 @@ namespace Chaldran
             player.AddComponent<PrototypeYSort>();
             run.Stats = player.AddComponent<PlayerStats>();
             run.Stats.Initialize(balance, run);
+            JourneyCheckpoint checkpoint = null;
+            if (overland)
+            {
+                checkpoint = JourneyStore.TakePending();
+                if (checkpoint == null) JourneyStore.TryLoad(out checkpoint);
+                if (checkpoint != null && !checkpoint.IsValid) checkpoint = null;
+                run.Progress.RestoreCompletedTutorial();
+                if (checkpoint != null)
+                {
+                    run.Stats.Vitals.LoadResources(checkpoint.essence, checkpoint.resonance);
+                    body.position = new Vector2(checkpoint.x, checkpoint.y);
+                    player.transform.position = new Vector2(checkpoint.x, checkpoint.y);
+                }
+            }
             run.Motor = player.AddComponent<PlayerMotor2D>();
             run.Motor.Initialize(run);
             run.Combat = player.AddComponent<PlayerCombat>();
             run.Combat.Initialize(run);
             run.Interactor = player.AddComponent<PlayerInteractor>();
             run.Interactor.Initialize(run);
+            player.AddComponent<AvatarPresentation>().Initialize(run);
 
             GameObject cameraObject = new GameObject("Trial camera", typeof(Camera), typeof(AudioListener), typeof(UniversalAdditionalCameraData));
             cameraObject.transform.SetParent(transform, false);
@@ -60,12 +76,25 @@ namespace Chaldran
             camera.orthographicSize = 6.75f;
             camera.aspect = 16f / 9f;
             camera.clearFlags = CameraClearFlags.SolidColor;
-            camera.backgroundColor = new Color(0.015f, 0.025f, 0.04f);
-            cameraObject.AddComponent<PrototypeCamera2D>().Target = player.transform;
+            camera.backgroundColor = presentation.background;
+            PrototypeCamera2D follow = cameraObject.AddComponent<PrototypeCamera2D>();
+            follow.Target = player.transform;
+            follow.PixelsPerUnit = presentation.cellPixels;
             run.WorldCamera = camera;
 
             run.Hud = gameObject.AddComponent<PrototypeHud>();
             run.Hud.Initialize(run, font);
+            if (overland)
+            {
+                SpawnInteractable(run, "Directory waystone", new Vector2(-6, -4), 8, TrialInteraction.Checkpoint);
+                SpawnInteractable(run, "Restoration spring", new Vector2(-9, 0), 5, TrialInteraction.RestorationRelay);
+                SpawnInteractable(run, "Directory boundary marker", new Vector2(7, 4), 4, TrialInteraction.Landmark);
+                player.AddComponent<PlayerInputRouter>().Initialize(run, playerControls);
+                player.SetActive(true);
+                run.ShowMessage(checkpoint != null ? "User Directory restored. Your weapon and resources carried through."
+                    : "User Directory preview. Explore the clearing; E at the waystone saves a checkpoint.", 7f);
+                return;
+            }
             SpawnInteractable(run, "Suppressed weapon anomaly", new Vector2(-7, -5), 4, TrialInteraction.Anomaly);
             SpawnInteractable(run, "Restoration relay", new Vector2(-9, 0), 5, TrialInteraction.RestorationRelay);
             GameObject gate = SpawnInteractable(run, "Read-Only barrier", new Vector2(7, 4), 7, TrialInteraction.Barrier, new Vector2(3, 1));
@@ -113,10 +142,21 @@ namespace Chaldran
                 Vector3Int cell = new Vector3Int(x + 12, y + 8, 0);
                 ground.SetTile(cell, floorTile);
                 bool boundary = x == -12 || x == 12 || y == -8 || y == 8;
-                bool partition = y == 4 && (x < 6 || x > 8);
+                bool partition = !overland && y == 4 && (x < 6 || x > 8);
                 if (!boundary && !partition) continue;
                 walls.SetTile(cell, wallTile);
                 Solid("Containment collision", new Vector2(x, y), Vector2.one);
+            }
+            if (overland)
+            {
+                foreach (Vector2 position in new[] { new Vector2(-7, 2), new Vector2(-3, 4), new Vector2(3, 2), new Vector2(8, -3), new Vector2(-2, -5) })
+                {
+                    GameObject tree = visuals.Make("Directory tree", position, 1, Vector2.one * 2.3f);
+                    tree.AddComponent<PrototypeYSort>();
+                    Solid("Tree trunk collision", position + Vector2.down * 0.55f, new Vector2(0.65f, 0.5f));
+                }
+                for (int x = -10; x <= 9; x++) visuals.Make("Old directory path", new Vector2(x, -4), 14, Vector2.one, 1);
+                return;
             }
             foreach (Vector2 position in new[] { new Vector2(-4, -1), new Vector2(4, -1) })
             {

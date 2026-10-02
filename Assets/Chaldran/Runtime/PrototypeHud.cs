@@ -12,6 +12,9 @@ namespace Chaldran
         private RectTransform root, worldRect, essenceFill, resonanceFill, enemyFill;
         private TextMeshProUGUI essenceText, resonanceText, objective, prompt, message, ability, enemyText, overlayTitle, overlayBody;
         private GameObject overlay;
+        private GameObject enemyPanel;
+        private Image arrivalCurtain;
+        private float arrivalUntil;
         private RenderTexture buffer;
         private readonly List<FloatingNumber> numbers = new List<FloatingNumber>();
         private readonly Color panelColor = new Color(0.025f, 0.04f, 0.075f, 0.94f);
@@ -42,7 +45,8 @@ namespace Chaldran
             AspectRatioFitter aspect = worldRect.gameObject.AddComponent<AspectRatioFitter>();
             aspect.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
             aspect.aspectRatio = 16f / 9f;
-            buffer = new RenderTexture(384, 216, 24) { name = "Quarantine pixel buffer", filterMode = FilterMode.Point };
+            buffer = new RenderTexture(run.Presentation.bufferWidth, run.Presentation.bufferHeight, 24)
+                { name = "Chaldran presentation buffer", filterMode = FilterMode.Point };
             buffer.Create();
             RawImage view = worldRect.gameObject.AddComponent<RawImage>();
             view.texture = buffer;
@@ -51,7 +55,8 @@ namespace Chaldran
 
             RectTransform stats = Panel("Player status", root, Vector2.up, Vector2.up, new Vector2(24, -24), new Vector2(306, 152), panelColor);
             Text("Game title", stats, new Vector2(14, -12), new Vector2(278, 26), 20, "FIELDS OF CHALDRAN", ink);
-            Text("Location", stats, new Vector2(14, -42), new Vector2(278, 20), 13, "QUARANTINE ANNEX // ASHEN CROWN TRIAL", new Color(0.42f, 0.78f, 0.8f));
+            Text("Location", stats, new Vector2(14, -42), new Vector2(278, 20), 13,
+                run.Presentation.displayName, run.Presentation.hudAccent);
             essenceFill = Bar(stats, new Vector2(14, -73), new Vector2(278, 25), new Color(0.61f, 0.2f, 0.26f));
             resonanceFill = Bar(stats, new Vector2(14, -109), new Vector2(278, 25), new Color(0.08f, 0.49f, 0.66f));
             essenceText = Text("Essence", stats, new Vector2(22, -76), new Vector2(260, 20), 15, "", ink);
@@ -64,13 +69,15 @@ namespace Chaldran
                 $"OVERRIDE {run.Stats.Vitals.Override:0}  /  CRIT {run.Stats.Vitals.CritChance:P0}  /  PEN {run.Stats.Vitals.Penetration:P0}", new Color(0.5f, 0.72f, 0.78f));
 
             RectTransform enemy = Panel("Enemy status", root, new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -24), new Vector2(240, 76), panelColor);
+            enemyPanel = enemy.gameObject;
+            enemyPanel.SetActive(!run.IsOverland);
             Text("Enemy heading", enemy, new Vector2(12, -10), new Vector2(216, 22), 15, "CLOCKWORK SENTINEL", new Color(0.93f, 0.73f, 0.44f));
             enemyFill = Bar(enemy, new Vector2(12, -37), new Vector2(216, 13), new Color(0.78f, 0.46f, 0.18f));
             enemyText = Text("Enemy health", enemy, new Vector2(12, -53), new Vector2(216, 18), 12, "", ink);
 
             RectTransform controls = Panel("Controls", root, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 18), new Vector2(710, 62), panelColor);
             Text("Controls text", controls, new Vector2(14, -9), new Vector2(682, 46), 15,
-                "WASD move   SHIFT sprint   MOUSE aim   LMB strike   RMB hold block\nE interact   Q Ashen Burst   ESC pause   ENTER retry after defeat / completion", ink);
+                "WASD move   SHIFT sprint   MOUSE aim   LMB strike   RMB hold block\nE use   Q burst   ESC pause   C checkpoint   F5 new trial   ENTER retry", ink);
             prompt = CenterText("Interaction prompt", new Vector2(0.5f, 0), new Vector2(0, 100), new Vector2(760, 34), 21, new Color(0.55f, 1f, 0.88f));
             message = CenterText("Notice", new Vector2(0.5f, 0), new Vector2(0, 148), new Vector2(860, 50), 18, ink);
             RectTransform skill = Panel("Ability", root, Vector2.right, Vector2.right, new Vector2(-24, 18), new Vector2(214, 62), panelColor);
@@ -81,6 +88,12 @@ namespace Chaldran
             overlayTitle = CenterText("Overlay title", new Vector2(0.5f, 0.5f), new Vector2(0, 52), new Vector2(900, 70), 38, new Color(0.82f, 0.94f, 0.9f), overlay.transform);
             overlayBody = CenterText("Overlay instructions", new Vector2(0.5f, 0.5f), new Vector2(0, -38), new Vector2(820, 100), 22, ink, overlay.transform);
             overlay.SetActive(false);
+            if (run.IsOverland)
+            {
+                arrivalCurtain = Panel("Directory arrival", root, Vector2.zero, Vector2.zero, Vector2.zero,
+                    Vector2.zero, Color.black, true).GetComponent<Image>();
+                arrivalUntil = Time.unscaledTime + 0.8f;
+            }
             run.Stats.Changed += RefreshStats;
             run.Changed += RefreshObjective;
             RefreshStats();
@@ -96,7 +109,7 @@ namespace Chaldran
             resonanceText.text = $"RESONANCE  {values.Resonance:0} / {values.MaxResonance:0}";
         }
 
-        private void RefreshObjective() { objective.text = run.Progress.Objective; }
+        private void RefreshObjective() { objective.text = run.Objective; }
 
         private void Update()
         {
@@ -111,14 +124,23 @@ namespace Chaldran
                 Fill(enemyFill, run.Sentinel.Essence / run.Sentinel.MaxEssence);
                 enemyText.text = run.Sentinel.IsAlive ? $"{run.Sentinel.Essence:0} / {run.Sentinel.MaxEssence:0} ESSENCE" : "CONTAINMENT UNIT DISABLED";
             }
-            bool visible = run.IsPaused || !run.Stats.Vitals.IsAlive || run.Progress.Complete;
+            bool visible = run.IsTransitioning || run.IsPaused || !run.Stats.Vitals.IsAlive || (!run.IsOverland && run.Progress.Complete);
             overlay.SetActive(visible);
             if (visible)
             {
-                overlayTitle.text = run.Progress.Complete ? "PERMISSION GRANTED" : run.IsPaused ? "SIMULATION SUSPENDED" : "DIVINE SIGNAL LOST";
-                overlayBody.text = run.Progress.Complete ? "Quarantine Trial complete.\nPress ENTER to play again."
-                    : run.IsPaused ? "Press ESC to resume.\nAim toward the sentinel while blocking."
+                overlayTitle.text = run.IsTransitioning ? "QUARANTINE RELEASED"
+                    : (!run.IsOverland && run.Progress.Complete) ? "PERMISSION GRANTED" : run.IsPaused ? "SIMULATION SUSPENDED" : "DIVINE SIGNAL LOST";
+                overlayBody.text = run.IsTransitioning ? "Your personal containment has ended.\nThe User Directory is resolving."
+                    : (!run.IsOverland && run.Progress.Complete) ? "Quarantine Trial complete.\nPress ENTER to retry."
+                    : run.IsPaused ? "Press ESC to resume.\nC resumes your checkpoint; F5 starts a new trial."
+                    : run.IsOverland ? "The divine signal has faded.\nPress ENTER to restore the overland checkpoint."
                     : "The Engine has reasserted containment.\nPress ENTER to retry the trial.";
+            }
+            if (arrivalCurtain != null)
+            {
+                float alpha = Mathf.Clamp01((arrivalUntil - Time.unscaledTime) / 0.8f);
+                arrivalCurtain.color = new Color(0, 0, 0, alpha);
+                arrivalCurtain.gameObject.SetActive(alpha > 0f);
             }
             for (int i = numbers.Count - 1; i >= 0; i--)
             {

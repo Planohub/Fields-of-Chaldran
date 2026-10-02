@@ -14,6 +14,13 @@ namespace Chaldran.Editor
             EditorSceneManager.OpenScene("Assets/Chaldran/Scenes/QuarantinePrototype.unity");
         }
 
+        [MenuItem("Fields of Chaldran/Open Overland Preview")]
+        public static void OpenOverland()
+        {
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            EditorSceneManager.OpenScene(JourneyStore.OverlandScene);
+        }
+
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
@@ -26,6 +33,15 @@ namespace Chaldran.Editor
         private static void DrawLayout(PrototypeBootstrap bootstrap, GizmoType type)
         {
             if (Application.isPlaying) return;
+            if (bootstrap.gameObject.scene.path == JourneyStore.OverlandScene)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube(Vector3.zero, new Vector3(25f, 17f, 0f));
+                Marker(new Vector3(-9,-5), "Directory arrival", Color.cyan);
+                Marker(new Vector3(-6,-4), "Checkpoint waystone", Color.yellow);
+                Marker(new Vector3(7,4), "Boundary marker", Color.green);
+                return;
+            }
             Gizmos.color = new Color(0.3f, 0.65f, 0.75f);
             Gizmos.DrawWireCube(Vector3.zero, new Vector3(25f, 17f, 0f));
             Marker(new Vector3(-9, -5), "Avatar spawn", Color.cyan);

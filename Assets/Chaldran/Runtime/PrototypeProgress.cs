@@ -50,5 +50,14 @@ namespace Chaldran
             Complete = true;
             return true;
         }
+
+        public void RestoreCompletedTutorial()
+        {
+            HasWeapon = true;
+            WardenDefeated = true;
+            HasWriteAccess = false;
+            GateOpen = true;
+            Complete = true;
+        }
     }
 }

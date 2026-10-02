@@ -1,6 +1,6 @@
 # Fields of Chaldran
 
-A 2D top-down RPG by Shawn Plano. An awakened god breaks the Sorruin Engine's cognitive restraints and frees other quarantined gods. The current development branch adds a short **Quarantine Trial** for validating the gameplay foundation.
+A 2D top-down RPG by Shawn Plano. An awakened god breaks the Sorruin Engine's cognitive restraints and frees other quarantined gods. The development branch includes a **Quarantine Trial** and its first story-driven visual/audio transition into an overland **User Directory** clearing. The tutorial deliberately retains simple presentation.
 
 ## Open the new trial
 
@@ -23,31 +23,34 @@ The existing `Assets/Scenes/SampleScene.unity` remains a movement blockout. Its 
 | E | Use the closest available object within range and line of sight |
 | Q | Ashen Burst: a short-range fire ability |
 | Escape | Pause / resume |
-| Enter | Retry after defeat or trial completion |
+| Enter | Retry after defeat |
+| C | Resume the last valid overland checkpoint |
+| F5 | Start a fresh tutorial |
 
 Approach the cyan anomaly near the starting position and recover your weapon. Fight the bronze sentinel; its orange circle warns of an incoming strike. Move out of the circle or block while aiming toward the sentinel. The green relay on the west side restores resources, with a ten-second recharge.
 
-Defeat the sentinel, collect its Write-Access token with E, override the red northeast barrier, then use the exit terminal. This trial consumes its token when opening the gate.
+Defeat the sentinel, collect its Write-Access token with E, override the red northeast barrier, then use the exit terminal. The token is consumed when opening the gate. The terminal now transfers you to the richer overland tier with your weapon and current resources, and saves an entrance checkpoint. E at the overland waystone saves another checkpoint; C resumes it and F5 replays the tutorial.
 
 ## Current implementation
 
 - Separate runtime stats, combat calculations, input routing, movement, interaction, presentation, and trial progression.
 - Essence and Resonance bars, a live objective, sentinel health, cooldown feedback, damage numbers, pause, defeat/retry, and completion.
-- Original temporary pixel sprites, a 384×216 point-filtered world buffer, and six short original synthesized sound effects.
+- Editable presentation profiles: 16px sprites/256×144 world in quarantine; 32px sprites/512×288 world, a walking cycle, and richer music/cues in overland.
+- Automatic post-tutorial checkpoint plus a waystone save, with a versioned resource/position/tier snapshot.
 - Editable tuning in `Assets/Chaldran/Data/QuarantineBalance.asset`.
 - Preserved original input action IDs; additional bindings support the trial.
 - Corrected named input callback cleanup in the original `PlayerController`.
 
-This is a development trial. The Ashen Crown is assigned for testing; full domain selection, progression, inventory, persistence, Oracle dialogue, spatial loops, and the presentation-tier transition are subsequent work. The trial art and sounds establish feedback and readability while final assets are developed.
+This is a development trial. The Ashen Crown is assigned for testing; full domain selection, progression, inventory, full RPG persistence, Oracle dialogue, spatial loops, and later presentation tiers are subsequent work. The trial art and sounds establish feedback and readability while final assets are developed.
 
 ## Validation
 
-Five tests in `Assets/Chaldran/Tests/Editor/CombatFrameworkTests.cs` cover damage order, bounded Override scaling, invalid damage, resource/death behavior, and permission progression. They passed as standalone C# tests using NUnit 3.14.0. All 24 C# files passed a syntax parse, and source asset checks passed.
+Eleven tests across the combat and checkpoint suites passed as standalone C# tests using NUnit 3.14.0. All 30 C# files passed a syntax parse. Metadata, both scenes/profiles/atlases, input bindings, and all 14 audio clips passed source checks. The user reported the earlier trial working in Unity; the new transition still needs a Unity playtest.
 
-**Unity compilation, Play Mode, profiling, audio playback, and a Windows build have not been run in the authoring environment.** Open **Window → General → Test Runner** to run the EditMode tests in Unity, then follow [the playtest checks](Docs/QUARANTINE-TRIAL.md). The branch should remain under review until those checks pass.
+**Unity compilation, Play Mode, profiling, audio playback, and a Windows build have not been run in the authoring environment.** Open **Window → General → Test Runner** to run the EditMode tests in Unity, then follow [the transition playtest checks](Docs/PRESENTATION-PROGRESSION.md). The branch should remain under review until those checks pass.
 
-Optional source asset verification: `python Tools/verify_trial_assets.py`. Reproduce the trial atlas and SFX with `python Tools/generate_trial_assets.py` (Python 3 and Pillow). Unity users do not need Python to play the checked-in scene.
+Optional source asset verification: `python Tools/verify_trial_assets.py`. Reproduce the trial atlas and SFX with `python Tools/generate_trial_assets.py` (Python 3 and Pillow). Use `python Tools/generate_presentation_assets.py` for the new overland assets and musical tiers. Unity users do not need Python to play either checked-in scene.
 
 ## Next development milestone
 
-Validate this trial in Unity, address observed issues, and tune combat. Then add versioned save/checkpoint state and the first visual transition, followed by the Broken Oracle library mechanics. See [production notes](Docs/QUARANTINE-TRIAL.md).
+Validate the first transition and checkpoint resume in Unity, then extend the canonical opening before building the Broken Oracle library mechanics. See [presentation progression](Docs/PRESENTATION-PROGRESSION.md) and [combat/production notes](Docs/QUARANTINE-TRIAL.md).

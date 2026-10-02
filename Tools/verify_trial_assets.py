@@ -22,15 +22,22 @@ def verify():
         if path.suffix != '.meta':
             assert Path(str(path) + '.meta').exists(), f'Missing metadata: {path}'
 
-    scene_path = TRIAL / 'Scenes/QuarantinePrototype.unity'
-    scene = scene_path.read_text()
     package_material = '9dfc825aed78fcd4ba02077103263b40'
     assert package_material in (ASSETS / 'Settings/Renderer2D.asset').read_text()
-    for identity in re.findall(r'guid: ([0-9a-f]{32})', scene):
-        assert identity in identities or identity == package_material or identity.startswith('0000000000000000'), f'Unresolved scene GUID: {identity}'
-    file_ids = re.findall(r'^--- !u!\d+ &(\d+)', scene, re.M)
-    assert len(file_ids) == len(set(file_ids)), 'Duplicate scene document IDs'
-    assert 'path: Assets/Chaldran/Scenes/QuarantinePrototype.unity' in (ROOT / 'ProjectSettings/EditorBuildSettings.asset').read_text()
+    for path in list((TRIAL / 'Scenes').glob('*.unity')) + list((TRIAL / 'Data').glob('*.asset')):
+        scene = path.read_text()
+        for identity in re.findall(r'guid: ([0-9a-f]{32})', scene):
+            assert identity in identities or identity == package_material or identity.startswith('0000000000000000'), f'Unresolved GUID in {path}: {identity}'
+        file_ids = re.findall(r'^--- !u!\d+ &(\d+)', scene, re.M)
+        assert len(file_ids) == len(set(file_ids)), f'Duplicate scene document IDs: {path}'
+    build_settings = (ROOT / 'ProjectSettings/EditorBuildSettings.asset').read_text()
+    for name in ['QuarantinePrototype', 'OverlandPrototype']:
+        assert f'path: Assets/Chaldran/Scenes/{name}.unity' in build_settings
+    for name, cell, buffer in [('QuarantinePresentation',16,(256,144)),('OverlandPresentation',32,(512,288))]:
+        profile = (TRIAL / 'Data' / (name + '.asset')).read_text()
+        for field,value in [('cellPixels',cell),('bufferWidth',buffer[0]),('bufferHeight',buffer[1])]:
+            assert f'  {field}: {value}\n' in profile
+        assert len(re.findall(r'^  - \{fileID: 8300000',profile,re.M)) == 6
 
     inputs = json.loads((ASSETS / 'PlayerControls.inputactions').read_text())['maps'][0]
     actions = {action['name']: action['id'] for action in inputs['actions']}
@@ -39,7 +46,7 @@ def verify():
                 'Interact': '5aede3f3-f4d8-45b9-815c-33d37286437e', 'Attack': '67893c94-a9b4-4d12-890f-8eef0e728b03'}
     for name, identity in original.items():
         assert actions[name] == identity, f'Existing input action identity changed: {name}'
-    for name in ['Block', 'Ability', 'Pause', 'Retry', 'Aim']:
+    for name in ['Block', 'Ability', 'Pause', 'Retry', 'Aim', 'Continue', 'NewTrial']:
         assert name in actions and any(binding['action'] == name for binding in inputs['bindings'])
     binding_ids = [binding['id'] for binding in inputs['bindings']]
     assert len(binding_ids) == len(set(binding_ids)), 'Duplicate binding IDs'
@@ -49,13 +56,15 @@ def verify():
     png = (TRIAL / 'Art/TrialAtlas.png').read_bytes()
     assert png[:8] == b'\x89PNG\r\n\x1a\n'
     assert struct.unpack('>II', png[16:24]) == (128, 32), 'Atlas must match the runtime 16x16 sprite layout'
-    for path in (TRIAL / 'Audio').glob('*.wav'):
+    assert struct.unpack('>II',(TRIAL / 'Art/OverlandAtlas.png').read_bytes()[16:24]) == (256,64)
+    clips = list((TRIAL / 'Audio').rglob('*.wav'))
+    for path in clips:
         with wave.open(str(path), 'rb') as clip:
-            assert clip.getnchannels() == 1 and clip.getsampwidth() == 2 and clip.getframerate() == 44100
+            assert clip.getnchannels() == 1 and clip.getsampwidth() == 2 and clip.getframerate() in [8000,16000,22050,44100]
             samples = struct.unpack('<' + 'h' * clip.getnframes(), clip.readframes(clip.getnframes()))
             assert samples and max(abs(value) for value in samples) < 32767, f'Clipped audio: {path}'
-    assert len(list((TRIAL / 'Audio').glob('*.wav'))) == 6
-    print('PASS trial metadata, scene references, layers, preserved input IDs, atlas layout, and six audio clips.')
+    assert len(clips) == 14
+    print('PASS metadata, two scenes/profiles/atlases, layers, preserved input IDs, and 14 audio clips.')
 
 
 if __name__ == '__main__':

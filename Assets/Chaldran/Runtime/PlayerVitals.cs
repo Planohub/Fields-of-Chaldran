@@ -51,5 +51,11 @@ namespace Chaldran
             Essence = MaxEssence;
             Resonance = MaxResonance;
         }
+
+        public void LoadResources(float essence, float resonance)
+        {
+            Essence = Math.Min(MaxEssence, CombatMath.NonNegative(essence));
+            Resonance = Math.Min(MaxResonance, CombatMath.NonNegative(resonance));
+        }
     }
 }
