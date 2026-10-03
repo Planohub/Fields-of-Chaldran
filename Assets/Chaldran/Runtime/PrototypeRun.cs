@@ -9,9 +9,12 @@ namespace Chaldran
     {
         public PrototypeBalance Balance { get; private set; }
         public PresentationProfile Presentation { get; private set; }
+        public DirectoryStoryDefinition StoryDefinition { get; private set; }
+        public StoryProgress Story { get; } = new StoryProgress();
+        public PrototypeDialogue Dialogue { get; set; }
         public bool IsOverland { get; private set; }
         public bool IsTransitioning { get; private set; }
-        public string Objective => IsOverland ? "Explore the User Directory. Save at the waystone."
+        public string Objective => IsOverland ? StoryDefinition.Objective(Story)
             : Progress.Objective;
         public PrototypeProgress Progress { get; } = new PrototypeProgress();
         public PrototypeVisuals Visuals { get; private set; }
@@ -25,18 +28,59 @@ namespace Chaldran
         public PrototypeAudio Audio { get; set; }
         public bool IsPaused { get; private set; }
         public bool IsActive => Stats != null && Stats.Vitals != null && Stats.Vitals.IsAlive
-            && !IsPaused && !IsTransitioning && (IsOverland || !Progress.Complete);
+            && !IsPaused && !IsTransitioning && !(Dialogue != null && Dialogue.IsOpen) && (IsOverland || !Progress.Complete);
         public string Message { get; private set; }
         public float MessageUntil { get; private set; }
         public event Action Changed;
+        private bool arrivalPrompted;
 
-        public void Initialize(PrototypeBalance balance, PrototypeVisuals visuals, PresentationProfile presentation, bool overland)
+        public void Initialize(PrototypeBalance balance, PrototypeVisuals visuals, PresentationProfile presentation,
+            bool overland, DirectoryStoryDefinition storyDefinition)
         {
             Presentation = presentation;
             IsOverland = overland;
+            StoryDefinition = storyDefinition;
             Balance = balance;
             Visuals = visuals;
             Time.timeScale = 1f;
+        }
+
+        private IEnumerator Start()
+        {
+            if (!IsOverland || Story.CompletedSteps != 0) yield break;
+            yield return new WaitForSecondsRealtime(0.85f);
+            if (!arrivalPrompted && IsActive && Story.CompletedSteps == 0) BeginStoryBeat(DirectoryBeat.Arrival);
+        }
+
+        public void BeginStoryBeat(DirectoryBeat beat)
+        {
+            if (!IsOverland || !IsActive) return;
+            int index = (int)beat;
+            if (index < 0 || index >= StoryProgress.StepCount) return;
+            if (Story.CompletedSteps == 0) { beat = DirectoryBeat.Arrival; index = 0; }
+            if (index > Story.CompletedSteps)
+            {
+                ShowMessage(Objective, 5f);
+                return;
+            }
+            DirectoryBeat completedBeat = beat;
+            bool began = Dialogue.Begin(StoryDefinition.steps[index].dialogue, () =>
+            {
+                if (!Story.TryComplete(completedBeat)) return;
+                NotifyChanged();
+                bool saved = SaveCurrentCheckpoint();
+                Audio.Play(Story.Complete ? TrialSound.Complete : TrialSound.Pickup);
+                ShowMessage(saved ? "Story progress saved. " + Objective
+                    : "Story advanced, but saving failed. Use the waystone to try again.", 6f);
+            });
+            if (began && completedBeat == DirectoryBeat.Arrival) arrivalPrompted = true;
+        }
+
+        private bool SaveCurrentCheckpoint()
+        {
+            Vector2 position = Stats.transform.position;
+            return JourneyStore.Save(JourneyCheckpoint.Capture(Stats.Vitals,
+                Mathf.Clamp(position.x, -10.5f, 10.5f), Mathf.Clamp(position.y, -6.5f, 6.5f), Story));
         }
 
         public void NotifyChanged() { Changed?.Invoke(); }
@@ -60,7 +104,7 @@ namespace Chaldran
 
         public void TogglePause()
         {
-            if (Stats == null || !Stats.Vitals.IsAlive || IsTransitioning || (!IsOverland && Progress.Complete)) return;
+            if (Stats == null || !Stats.Vitals.IsAlive || IsTransitioning || Dialogue.IsOpen || (!IsOverland && Progress.Complete)) return;
             IsPaused = !IsPaused;
             Time.timeScale = IsPaused ? 0f : 1f;
             AudioListener.pause = IsPaused;
@@ -78,7 +122,7 @@ namespace Chaldran
         {
             if (IsOverland || !Progress.Complete || IsTransitioning) return;
             IsTransitioning = true;
-            Motor.MoveInput = Vector2.zero;
+            Motor.Stop();
             Combat.IsBlocking = false;
             StartCoroutine(Transition());
         }
@@ -103,8 +147,7 @@ namespace Chaldran
         public void SaveCheckpoint()
         {
             if (!IsOverland || !IsActive) return;
-            Vector2 position = Stats.transform.position;
-            bool saved = JourneyStore.Save(JourneyCheckpoint.Capture(Stats.Vitals, position.x, position.y));
+            bool saved = SaveCurrentCheckpoint();
             if (saved) Audio.Play(TrialSound.Pickup);
             ShowMessage(saved ? "Waystone checkpoint saved. Press C to return here."
                 : "Checkpoint could not be saved. Your current run is still active.");
@@ -112,7 +155,7 @@ namespace Chaldran
 
         public void ContinueJourney()
         {
-            if (IsTransitioning) return;
+            if (IsTransitioning || Dialogue.IsOpen) return;
             if (!JourneyStore.TryLoad(out JourneyCheckpoint checkpoint))
             {
                 ShowMessage("No valid overland checkpoint. Complete the quarantine tutorial first.");
@@ -126,7 +169,7 @@ namespace Chaldran
 
         public void NewTrial()
         {
-            if (IsTransitioning) return;
+            if (IsTransitioning || Dialogue.IsOpen) return;
             JourneyStore.Pending = null;
             Time.timeScale = 1f;
             AudioListener.pause = false;

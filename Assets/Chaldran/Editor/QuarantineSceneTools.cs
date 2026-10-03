@@ -39,7 +39,9 @@ namespace Chaldran.Editor
                 Gizmos.DrawWireCube(Vector3.zero, new Vector3(25f, 17f, 0f));
                 Marker(new Vector3(-9,-5), "Directory arrival", Color.cyan);
                 Marker(new Vector3(-6,-4), "Checkpoint waystone", Color.yellow);
-                Marker(new Vector3(7,4), "Boundary marker", Color.green);
+                Marker(new Vector3(-1,-4), "Damaged directory record", Color.yellow);
+                Marker(new Vector3(7,4), "Library route marker", Color.green);
+                Marker(new Vector3(7,6), "Compressed library threshold", Color.cyan);
                 return;
             }
             Gizmos.color = new Color(0.3f, 0.65f, 0.75f);

@@ -9,15 +9,18 @@ namespace Chaldran
         public const string TrialScene = "Assets/Chaldran/Scenes/QuarantinePrototype.unity";
         public const string OverlandScene = "Assets/Chaldran/Scenes/OverlandPrototype.unity";
         public static JourneyCheckpoint Pending { get; set; }
-        private static string SavePath => Path.Combine(Application.persistentDataPath, "chaldran-prototype-checkpoint-v1.json");
+        private static string SavePath => Path.Combine(Application.persistentDataPath, "chaldran-prototype-checkpoint-v2.json");
+        private static string LegacyPath => Path.Combine(Application.persistentDataPath, "chaldran-prototype-checkpoint-v1.json");
 
         public static bool TryLoad(out JourneyCheckpoint checkpoint)
         {
             checkpoint = null;
-            string json = CheckpointFile.TryRead(SavePath);
+            // A corrupt current save must not silently roll back to the old tutorial-only save.
+            string json = CheckpointFile.TryRead(File.Exists(SavePath) ? SavePath : LegacyPath);
             if (json == null) return false;
             try { checkpoint = JsonUtility.FromJson<JourneyCheckpoint>(json); }
             catch (ArgumentException) { return false; }
+            checkpoint = JourneyCheckpoint.Upgrade(checkpoint);
             return checkpoint != null && checkpoint.IsValid;
         }
 
@@ -31,7 +34,7 @@ namespace Chaldran
         {
             JourneyCheckpoint result = Pending;
             Pending = null;
-            return result != null && result.IsValid ? result : null;
+            return JourneyCheckpoint.Upgrade(result);
         }
     }
 }

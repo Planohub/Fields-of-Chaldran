@@ -12,6 +12,7 @@ namespace Chaldran
         [SerializeField] private PrototypeBalance balance;
         [SerializeField] private PresentationProfile presentation;
         [SerializeField] private bool overland;
+        [SerializeField] private DirectoryStoryDefinition directoryStory;
         [SerializeField] private TMP_FontAsset font;
         [SerializeField] private Material spriteMaterial;
         [SerializeField] private InputActionAsset playerControls;
@@ -20,15 +21,18 @@ namespace Chaldran
         private void Awake()
         {
             if (balance == null || presentation == null || !presentation.IsValid || font == null || spriteMaterial == null || playerControls == null
-                || presentation.tier != (overland ? PresentationTier.Overland : PresentationTier.Quarantine))
+                || presentation.tier != (overland ? PresentationTier.Overland : PresentationTier.Quarantine)
+                || (overland && (directoryStory == null || !directoryStory.IsValid)))
             {
-                Debug.LogError("Quarantine Trial is missing a required asset. Open the checked-in QuarantinePrototype scene.", this);
+                Debug.LogError("Chaldran prototype is missing a required asset. Open a checked-in prototype scene.", this);
                 enabled = false;
                 return;
             }
             PrototypeVisuals visuals = new PrototypeVisuals(presentation, spriteMaterial, transform);
             PrototypeRun run = gameObject.AddComponent<PrototypeRun>();
-            run.Initialize(balance, visuals, presentation, overland);
+            run.Initialize(balance, visuals, presentation, overland, directoryStory);
+            run.Dialogue = gameObject.AddComponent<PrototypeDialogue>();
+            run.Dialogue.Initialize(run);
             run.Audio = gameObject.AddComponent<PrototypeAudio>();
             run.Audio.Initialize(presentation);
             BuildWorld(visuals);
@@ -54,6 +58,7 @@ namespace Chaldran
                 run.Progress.RestoreCompletedTutorial();
                 if (checkpoint != null)
                 {
+                    run.Story.Restore(checkpoint.storyStep);
                     run.Stats.Vitals.LoadResources(checkpoint.essence, checkpoint.resonance);
                     body.position = new Vector2(checkpoint.x, checkpoint.y);
                     player.transform.position = new Vector2(checkpoint.x, checkpoint.y);
@@ -86,13 +91,19 @@ namespace Chaldran
             run.Hud.Initialize(run, font);
             if (overland)
             {
-                SpawnInteractable(run, "Directory waystone", new Vector2(-6, -4), 8, TrialInteraction.Checkpoint);
+                SpawnInteractable(run, "Directory waystone", new Vector2(-6, -4), 8, TrialInteraction.Checkpoint)
+                    .AddComponent<StoryObjectiveMarker>().Initialize(run, DirectoryBeat.Waystone);
                 SpawnInteractable(run, "Restoration spring", new Vector2(-9, 0), 5, TrialInteraction.RestorationRelay);
-                SpawnInteractable(run, "Directory boundary marker", new Vector2(7, 4), 4, TrialInteraction.Landmark);
+                SpawnInteractable(run, "Damaged directory record", new Vector2(-1, -4), 6, TrialInteraction.SignalRecord)
+                    .AddComponent<StoryObjectiveMarker>().Initialize(run, DirectoryBeat.SignalRecord);
+                SpawnInteractable(run, "Library route marker", new Vector2(7, 4), 4, TrialInteraction.Landmark)
+                    .AddComponent<StoryObjectiveMarker>().Initialize(run, DirectoryBeat.RouteMarker);
+                SpawnInteractable(run, "Compressed library threshold", new Vector2(7, 6), 8, TrialInteraction.LibraryThreshold)
+                    .AddComponent<StoryObjectiveMarker>().Initialize(run, DirectoryBeat.LibraryThreshold);
                 player.AddComponent<PlayerInputRouter>().Initialize(run, playerControls);
                 player.SetActive(true);
-                run.ShowMessage(checkpoint != null ? "User Directory restored. Your weapon and resources carried through."
-                    : "User Directory preview. Explore the clearing; E at the waystone saves a checkpoint.", 7f);
+                run.ShowMessage(checkpoint != null ? "User Directory restored. " + run.Objective
+                    : "Your personal quarantine has ended. The User Directory stretches ahead.", 7f);
                 return;
             }
             SpawnInteractable(run, "Suppressed weapon anomaly", new Vector2(-7, -5), 4, TrialInteraction.Anomaly);
@@ -156,6 +167,13 @@ namespace Chaldran
                     Solid("Tree trunk collision", position + Vector2.down * 0.55f, new Vector2(0.65f, 0.5f));
                 }
                 for (int x = -10; x <= 9; x++) visuals.Make("Old directory path", new Vector2(x, -4), 14, Vector2.one, 1);
+                for (int y = -3; y <= 6; y++) visuals.Make("Library approach", new Vector2(7, y), 14, Vector2.one, 1);
+                foreach (float x in new[] { 5.5f, 8.5f })
+                {
+                    GameObject stone = visuals.Make("Library threshold stone", new Vector2(x, 6), 12, Vector2.one * 1.5f);
+                    stone.AddComponent<PrototypeYSort>();
+                    Solid("Threshold stone collision", new Vector2(x, 6), new Vector2(0.65f, 0.75f));
+                }
                 return;
             }
             foreach (Vector2 position in new[] { new Vector2(-4, -1), new Vector2(4, -1) })

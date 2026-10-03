@@ -14,6 +14,8 @@ namespace Chaldran
         private GameObject overlay;
         private GameObject enemyPanel;
         private Image arrivalCurtain;
+        private GameObject dialogueOverlay;
+        private TextMeshProUGUI dialogueSpeaker, dialogueBody, dialogueControls;
         private float arrivalUntil;
         private RenderTexture buffer;
         private readonly List<FloatingNumber> numbers = new List<FloatingNumber>();
@@ -63,8 +65,9 @@ namespace Chaldran
             resonanceText = Text("Resonance", stats, new Vector2(22, -112), new Vector2(260, 20), 15, "", ink);
 
             RectTransform directive = Panel("Directive", root, Vector2.one, Vector2.one, new Vector2(-24, -24), new Vector2(326, 152), panelColor);
-            Text("Directive heading", directive, new Vector2(14, -12), new Vector2(298, 24), 16, "CURRENT DIRECTIVE", new Color(0.89f, 0.73f, 0.44f));
-            objective = Text("Objective", directive, new Vector2(14, -44), new Vector2(298, 58), 18, "", ink);
+            Text("Directive heading", directive, new Vector2(14, -12), new Vector2(298, 24), 16,
+                run.IsOverland ? run.StoryDefinition.questTitle : "CURRENT DIRECTIVE", new Color(0.89f, 0.73f, 0.44f));
+            objective = Text("Objective", directive, new Vector2(14, -44), new Vector2(298, 66), 17, "", ink);
             Text("Override", directive, new Vector2(14, -112), new Vector2(298, 26), 13,
                 $"OVERRIDE {run.Stats.Vitals.Override:0}  /  CRIT {run.Stats.Vitals.CritChance:P0}  /  PEN {run.Stats.Vitals.Penetration:P0}", new Color(0.5f, 0.72f, 0.78f));
 
@@ -88,6 +91,14 @@ namespace Chaldran
             overlayTitle = CenterText("Overlay title", new Vector2(0.5f, 0.5f), new Vector2(0, 52), new Vector2(900, 70), 38, new Color(0.82f, 0.94f, 0.9f), overlay.transform);
             overlayBody = CenterText("Overlay instructions", new Vector2(0.5f, 0.5f), new Vector2(0, -38), new Vector2(820, 100), 22, ink, overlay.transform);
             overlay.SetActive(false);
+            dialogueOverlay = Panel("Dialogue shade", root, Vector2.zero, Vector2.zero, Vector2.zero,
+                Vector2.zero, new Color(0f, 0f, 0f, 0.25f), true).gameObject;
+            RectTransform conversation = Panel("Conversation", dialogueOverlay.transform,
+                new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 105), new Vector2(940, 292), panelColor);
+            dialogueSpeaker = Text("Speaker", conversation, new Vector2(24, -22), new Vector2(892, 28), 22, "", run.Presentation.hudAccent);
+            dialogueBody = Text("Dialogue text", conversation, new Vector2(24, -65), new Vector2(892, 160), 22, "", ink);
+            dialogueControls = Text("Dialogue controls", conversation, new Vector2(24, -248), new Vector2(892, 28), 16, "", new Color(0.89f, 0.73f, 0.44f));
+            dialogueOverlay.SetActive(false);
             if (run.IsOverland)
             {
                 arrivalCurtain = Panel("Directory arrival", root, Vector2.zero, Vector2.zero, Vector2.zero,
@@ -114,7 +125,18 @@ namespace Chaldran
         private void Update()
         {
             if (run == null || root == null) return;
-            prompt.text = run.Interactor.Target != null ? run.Interactor.Target.Prompt : "";
+            bool talking = run.Dialogue.IsOpen;
+            dialogueOverlay.SetActive(talking);
+            if (talking)
+            {
+                DialogueSession session = run.Dialogue.Session;
+                DialogueLine line = run.Dialogue.Current.lines[session.LineIndex];
+                dialogueSpeaker.text = line.speaker;
+                dialogueBody.text = line.text;
+                dialogueControls.text = $"{session.LineIndex + 1} / {session.LineCount}    E or ENTER: next    ESC: close";
+            }
+            prompt.text = talking ? "" : run.IsOverland && run.Story.CompletedSteps == 0 ? "[E] Take in the changed world"
+                : run.Interactor.Target != null ? run.Interactor.Target.Prompt : "";
             message.text = Time.unscaledTime < run.MessageUntil ? run.Message : "";
             ability.text = !run.Progress.HasWeapon ? "Q  ASHEN BURST\nRecover your weapon"
                 : run.Combat.BurstCooldownRemaining > 0f ? $"Q  ASHEN BURST\n{run.Combat.BurstCooldownRemaining:0.0}s cooldown"

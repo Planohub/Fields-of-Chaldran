@@ -24,7 +24,7 @@ def verify():
 
     package_material = '9dfc825aed78fcd4ba02077103263b40'
     assert package_material in (ASSETS / 'Settings/Renderer2D.asset').read_text()
-    for path in list((TRIAL / 'Scenes').glob('*.unity')) + list((TRIAL / 'Data').glob('*.asset')):
+    for path in list((TRIAL / 'Scenes').glob('*.unity')) + list((TRIAL / 'Data').rglob('*.asset')):
         scene = path.read_text()
         for identity in re.findall(r'guid: ([0-9a-f]{32})', scene):
             assert identity in identities or identity == package_material or identity.startswith('0000000000000000'), f'Unresolved GUID in {path}: {identity}'
@@ -38,6 +38,24 @@ def verify():
         for field,value in [('cellPixels',cell),('bufferWidth',buffer[0]),('bufferHeight',buffer[1])]:
             assert f'  {field}: {value}\n' in profile
         assert len(re.findall(r'^  - \{fileID: 8300000',profile,re.M)) == 6
+
+    story = (TRIAL / 'Data/Story/UserDirectoryOpening.asset').read_text()
+    steps = re.findall(r'^  - beat: (\d+)\n    objective: (.+)\n    dialogue: \{fileID: 11400000, guid: ([0-9a-f]{32}), type: 2\}', story, re.M)
+    assert [int(step[0]) for step in steps] == list(range(5)), 'Story beats must preserve checkpoint order'
+    dialogue_script = re.search(r'^guid: (\w+)', (TRIAL / 'Runtime/DialogueDefinition.cs.meta').read_text(), re.M).group(1)
+    for _, objective, identity in steps:
+        assert json.loads(objective).strip(), 'Empty quest objective'
+        path = Path(str(identities[identity])[:-5])
+        dialogue = path.read_text()
+        assert f'guid: {dialogue_script}' in dialogue, f'Wrong dialogue type: {path}'
+        lines = re.findall(r'^  - speaker: (.+)\n    text: (.+)', dialogue, re.M)
+        assert 1 <= len(lines) <= 64, f'Invalid page count: {path}'
+        for speaker, text in lines:
+            assert json.loads(speaker).strip()
+            assert 0 < len(json.loads(text).strip()) <= 500, f'Invalid dialogue page: {path}'
+    identity = re.search(r'^guid: (\w+)', (TRIAL / 'Data/Story/UserDirectoryOpening.asset.meta').read_text(), re.M).group(1)
+    overland = (TRIAL / 'Scenes/OverlandPrototype.unity').read_text()
+    assert f'directoryStory: {{fileID: 11400000, guid: {identity}, type: 2}}' in overland
 
     inputs = json.loads((ASSETS / 'PlayerControls.inputactions').read_text())['maps'][0]
     actions = {action['name']: action['id'] for action in inputs['actions']}
@@ -64,7 +82,7 @@ def verify():
             samples = struct.unpack('<' + 'h' * clip.getnframes(), clip.readframes(clip.getnframes()))
             assert samples and max(abs(value) for value in samples) < 32767, f'Clipped audio: {path}'
     assert len(clips) == 14
-    print('PASS metadata, two scenes/profiles/atlases, layers, preserved input IDs, and 14 audio clips.')
+    print('PASS metadata, two scenes/profiles/atlases, five ordered story/dialogue references, layers, preserved input IDs, and 14 audio clips.')
 
 
 if __name__ == '__main__':

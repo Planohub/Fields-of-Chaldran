@@ -166,6 +166,7 @@ MonoBehaviour:
   balance: {fileID: 11400000, guid: b5f02808bc695f9fa626abbb1dc6fd25, type: 2}
   presentation: {fileID: 11400000, guid: 1a0ad3a79f0351bbb3d835a18079dfc9, type: 2}
   overland: 1
+  directoryStory: {fileID: 11400000, guid: 2b0da4b7d7c45cba87b5697cab768955, type: 2}
   font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   spriteMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   playerControls: {fileID: -944628639613478452, guid: be1c1c5b41318b046930d87caf817aee, type: 3}

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d59e754258534686e48a0ac6344d1a, type: 3}
+  m_Name: UserDirectoryOpening
+  m_EditorClassIdentifier: Chaldran.Runtime::Chaldran.DirectoryStoryDefinition
+  questTitle: PATH TO THE ORACLE
+  steps:
+  - beat: 0
+    objective: "Take in the changed world. Press E to continue."
+    dialogue: {fileID: 11400000, guid: 7f6b0364bb285c739b8f179c334c6126, type: 2}
+  - beat: 1
+    objective: "Read the waystone near the southwest path."
+    dialogue: {fileID: 11400000, guid: 388d830b0cb852f8a7b4c01a1bbca46a, type: 2}
+  - beat: 2
+    objective: "Follow the path east. Read the damaged record."
+    dialogue: {fileID: 11400000, guid: 76a7f028ac3559dfab62a8b63ab2cf7c, type: 2}
+  - beat: 3
+    objective: "Find the library route marker in the northeast."
+    dialogue: {fileID: 11400000, guid: be5c4eb0096b5039abd55692172357e0, type: 2}
+  - beat: 4
+    objective: "Reach the library threshold north of the marker."
+    dialogue: {fileID: 11400000, guid: 78d3fb491a0e5d7d84ea9db7c7b15524, type: 2}
+  completedObjective: "The Broken Oracle's library is located. Its quarantine is sealed."

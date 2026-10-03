@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e3baa961d25972983325a6f6a84961, type: 3}
+  m_Name: DirectoryLibraryThreshold
+  m_EditorClassIdentifier: Chaldran.Runtime::Chaldran.DialogueDefinition
+  lines:
+  - speaker: "AVATAR"
+    text: "A library should open into rooms. This passage seems to fold back on itself."
+  - speaker: "THRESHOLD INSCRIPTION"
+    text: "READ-ONLY QUARANTINE. Occupant: Broken Oracle."
+  - speaker: "AVATAR"
+    text: "I found the prison. Now I need to understand what keeps it closed."

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Chaldran
 {
-    public enum TrialInteraction { Anomaly, RestorationRelay, WriteAccess, Barrier, Exit, Checkpoint, Landmark }
+    public enum TrialInteraction { Anomaly, RestorationRelay, WriteAccess, Barrier, Exit, Checkpoint, Landmark, SignalRecord, LibraryThreshold }
 
     public sealed class PrototypeInteractable : MonoBehaviour
     {
@@ -19,8 +19,11 @@ namespace Chaldran
             {
                 switch (Kind)
                 {
-                    case TrialInteraction.Checkpoint: return "[E] Save at the directory waystone";
-                    case TrialInteraction.Landmark: return "[E] Read directory boundary marker";
+                    case TrialInteraction.Checkpoint: return run.Story.CompletedSteps <= 1
+                        ? "[E] Read the directory waystone" : "[E] Save at the directory waystone";
+                    case TrialInteraction.Landmark: return "[E] Read the library route marker";
+                    case TrialInteraction.SignalRecord: return "[E] Read the damaged record";
+                    case TrialInteraction.LibraryThreshold: return "[E] Examine the compressed library threshold";
                     case TrialInteraction.Anomaly: return "[E] Recover the anomalous weapon";
                     case TrialInteraction.RestorationRelay:
                         return Time.time < nextRestore ? "Restoration relay recharging" : "[E] Restore Essence and Resonance";
@@ -83,10 +86,17 @@ namespace Chaldran
                     run.BeginTransition();
                     break;
                 case TrialInteraction.Checkpoint:
-                    run.SaveCheckpoint();
+                    if (run.Story.CompletedSteps <= 1) run.BeginStoryBeat(DirectoryBeat.Waystone);
+                    else run.SaveCheckpoint();
                     break;
                 case TrialInteraction.Landmark:
-                    run.ShowMessage("Personal quarantine released. You are still inside the Sorruin Engine. The route beyond this clearing is the next chapter.", 8f);
+                    run.BeginStoryBeat(DirectoryBeat.RouteMarker);
+                    break;
+                case TrialInteraction.SignalRecord:
+                    run.BeginStoryBeat(DirectoryBeat.SignalRecord);
+                    break;
+                case TrialInteraction.LibraryThreshold:
+                    run.BeginStoryBeat(DirectoryBeat.LibraryThreshold);
                     break;
             }
             run.NotifyChanged();

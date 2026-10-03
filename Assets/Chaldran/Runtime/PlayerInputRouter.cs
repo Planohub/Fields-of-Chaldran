@@ -41,6 +41,12 @@ namespace Chaldran
         {
             if (actions == null || run == null) return;
             if (run.IsTransitioning) return;
+            if (run.Dialogue.IsOpen)
+            {
+                if (pause.WasPressedThisFrame()) run.Dialogue.Cancel();
+                else if (interact.WasPressedThisFrame() || retry.WasPressedThisFrame()) run.Dialogue.Advance();
+                return;
+            }
             if (newTrial.WasPressedThisFrame()) { run.NewTrial(); return; }
             if (resumeCheckpoint.WasPressedThisFrame()) { run.ContinueJourney(); return; }
             if (pause.WasPressedThisFrame()) run.TogglePause();
@@ -64,7 +70,12 @@ namespace Chaldran
             if (direction.sqrMagnitude > 0.01f) run.Motor.Facing = direction.normalized;
             run.Combat.IsBlocking = block.IsPressed() && run.Progress.HasWeapon;
             run.Stats.RegenerationSuppressed = run.Combat.IsBlocking;
-            if (interact.WasPressedThisFrame()) run.Interactor.TryInteract();
+            if (interact.WasPressedThisFrame())
+            {
+                if (run.IsOverland && run.Story.CompletedSteps == 0) run.BeginStoryBeat(DirectoryBeat.Arrival);
+                else run.Interactor.TryInteract();
+                if (!run.IsActive) return;
+            }
             if (attack.WasPressedThisFrame()) run.Combat.Attack();
             if (ability.WasPressedThisFrame()) run.Combat.Burst();
         }

@@ -27,9 +27,9 @@ namespace Chaldran.Tests
         public void UnsupportedOrInvalidCheckpointsAreRejected()
         {
             JourneyCheckpoint checkpoint = JourneyCheckpoint.Capture(new PlayerVitals(100,60,10,15),0,0);
-            checkpoint.version = 2;
+            checkpoint.version = JourneyCheckpoint.CurrentVersion + 1;
             Assert.That(checkpoint.IsValid, Is.False);
-            checkpoint.version = 1;
+            checkpoint.version = JourneyCheckpoint.CurrentVersion;
             checkpoint.tier = PresentationTier.Quarantine;
             Assert.That(checkpoint.IsValid, Is.False);
             checkpoint.tier = PresentationTier.Overland;

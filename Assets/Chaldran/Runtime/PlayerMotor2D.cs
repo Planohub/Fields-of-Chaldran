@@ -13,6 +13,12 @@ namespace Chaldran
 
         public void Initialize(PrototypeRun owner) { run = owner; body = GetComponent<Rigidbody2D>(); }
 
+        public void Stop()
+        {
+            MoveInput = Vector2.zero;
+            if (body != null) body.linearVelocity = Vector2.zero;
+        }
+
         private void FixedUpdate()
         {
             if (body == null || run == null) return;

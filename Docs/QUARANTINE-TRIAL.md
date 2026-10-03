@@ -53,12 +53,12 @@ The sentinel is a small state machine: dormant, hunting, warning, recovery, defe
 
 The October 1 recovery copied the earlier session's uncommitted implementation into a separate checkout. The recovered implementation was reviewed and the checks below were rerun. Progression now rejects sentinel defeat before weapon recovery and duplicate defeat notifications; resource regeneration stops while paused or after completion. Retry reloads the active scene by its full path.
 
-- Current combat and checkpoint test sources compiled with Roslyn in C# 9 mode and ran against NUnit 3.14.0: 11 passed, 0 failed.
-- Current C# syntax parsing: 30 files, no parse errors.
+- Current combat, checkpoint, and story test sources compiled with Roslyn in C# 9 mode and ran against NUnit 3.14.0: 19 passed, 0 failed.
+- Current C# syntax parsing: 38 files, no parse errors.
 - Metadata uniqueness and coverage; both scene GUIDs and scene IDs; build scene entries; preserved original input IDs and valid added bindings; correct layers; two atlas sizes; fourteen unclipped mono WAV files.
 - Diff whitespace checks and visual inspection of the generated pixel atlas.
 
-These checks do not establish Unity API compilation or runtime behavior. The authoring environment has no Unity Editor. The user reported the original trial working in Unity on October 1. Record the new transition playtest and standalone build results before accepting the updated branch.
+These checks do not establish Unity API compilation or runtime behavior. The authoring environment has no Unity Editor. The user reported the trial and first presentation transition working in Unity. Record the new opening story playtest and standalone build results before accepting the updated branch. See [the story checks](USER-DIRECTORY-OPENING.md).
 
 ## Asset pipeline
 
@@ -70,6 +70,6 @@ Art and six small synthesized effects were created specifically for this prototy
 
 1. Tune combat, then add a small set of meaningful equipment/relic definitions and player animation states.
 2. Expand the new post-tutorial checkpoint into versioned saves for domain, inventory, scene, and world permissions.
-3. Expand the first transition into the canonical quarantine escape using persistent progression state.
+3. Validate the new User Directory dialogue/quest sequence and expand the canonical opening using its persistent story state.
 4. Implement the Broken Oracle library's loop anchors, permission rules, relic upgrade, and boss encounter.
 5. Expand the validated art/audio pipeline to the remaining domains and visual tiers.
