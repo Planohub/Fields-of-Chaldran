@@ -39,6 +39,8 @@ In overland, read the arrival dialogue, southwest waystone, damaged record on th
 - Essence and Resonance bars, a live objective, sentinel health, cooldown feedback, damage numbers, pause, defeat/retry, and completion.
 - Editable presentation profiles: 16px sprites/256×144 world in quarantine; 32px sprites/512×288 world, a walking cycle, and richer music/cues in overland.
 - Editable dialogue assets, ordered objectives, and a saved approach to the Broken Oracle's library.
+- Fast NES-style quarantine text, typing sound, click/Enter instant reveal, centered directives/notices, and nearby interaction bubbles.
+- Guard pursuit around room obstacles while preserving the attack warning/recovery.
 - Automatic arrival/story checkpoints plus a waystone save, with versioned resources/position/tier/story state and migration from the earlier checkpoint.
 - Editable tuning in `Assets/Chaldran/Data/QuarantineBalance.asset`.
 - Preserved original input action IDs; additional bindings support the trial.
@@ -48,12 +50,12 @@ This is a development trial. The Ashen Crown is assigned for testing; full domai
 
 ## Validation
 
-Nineteen tests across the combat, checkpoint, and story suites passed as standalone C# tests using NUnit 3.14.0. All 38 C# files passed a syntax parse. Metadata, both scenes/profiles/atlases, five story/dialogue references, input bindings, and all 14 audio clips passed source checks. The user reported the earlier trial and presentation transition working in Unity; the new story sequence still needs a Unity playtest. Three additional asset/JsonUtility tests are provided for Unity EditMode.
+Twenty-eight tests across the combat, checkpoint, and story suites passed as standalone C# tests using NUnit 3.14.0. All 41 C# files passed a syntax parse. Metadata, both scenes/profiles/atlases, five story/dialogue references, input bindings, and all 15 audio clips passed source checks. The user reported the trial, presentation transition, and User Directory story working in Unity; the retro/readability and guard-pursuit update needs a Unity playtest. Four additional asset/JsonUtility tests are provided for Unity EditMode.
 
-**Unity compilation, Play Mode, profiling, audio playback, and a Windows build have not been run in the authoring environment.** Open **Window → General → Test Runner** to run the EditMode tests in Unity, then follow [the story playtest checks](Docs/USER-DIRECTORY-OPENING.md). The branch should remain under review until those checks pass.
+**Unity compilation, Play Mode, profiling, audio playback, and a Windows build have not been run in the authoring environment.** Open **Window → General → Test Runner** to run the EditMode tests in Unity, then follow [the retro/readability playtest checks](Docs/RETRO-READABILITY.md). The branch should remain under review until those checks pass.
 
 Optional source asset verification: `python Tools/verify_trial_assets.py`. Reproduce the trial atlas and SFX with `python Tools/generate_trial_assets.py` (Python 3 and Pillow). Use `python Tools/generate_presentation_assets.py` for the new overland assets and musical tiers. Unity users do not need Python to play either checked-in scene.
 
 ## Next development milestone
 
-Validate the User Directory story/continue sequence in Unity, then build the compressed library's loop, anchor, permission, and Oracle encounter mechanics. See [the opening sequence](Docs/USER-DIRECTORY-OPENING.md), [art handoff](Docs/ART-HANDOFF.md), [presentation progression](Docs/PRESENTATION-PROGRESSION.md), and [combat notes](Docs/QUARANTINE-TRIAL.md).
+Validate the retro/readability pass in Unity. Upcoming priorities are avatar/sword animation, a longer purposeful prison tutorial, and the compressed library. See [the recorded milestones](Docs/NEXT-MILESTONES.md). See [the opening sequence](Docs/USER-DIRECTORY-OPENING.md), [art handoff](Docs/ART-HANDOFF.md), [presentation progression](Docs/PRESENTATION-PROGRESSION.md), and [combat notes](Docs/QUARANTINE-TRIAL.md).

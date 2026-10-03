@@ -1,5 +1,6 @@
 namespace Chaldran
 {
+    public enum DialogueConfirm { None, Revealed, NextPage, Completed }
     // Presentation-independent paging. Closing a session never completes it.
     public sealed class DialogueSession
     {
@@ -25,5 +26,12 @@ namespace Chaldran
         }
 
         public void Cancel() { IsOpen = false; LineIndex = 0; }
+
+        public DialogueConfirm ConfirmPage(DialogueReveal reveal)
+        {
+            if (!IsOpen || reveal == null) return DialogueConfirm.None;
+            if (!reveal.Complete) { reveal.RevealAll(); return DialogueConfirm.Revealed; }
+            return Advance() ? DialogueConfirm.Completed : DialogueConfirm.NextPage;
+        }
     }
 }

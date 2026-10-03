@@ -47,7 +47,7 @@ No save is written from an invalid/dead player state. Resource restoration clamp
 
 ## Validation
 
-Nineteen standalone NUnit tests pass for combat/resources/permission order, story order, dialogue completion/cancellation, checkpoint continuity/migration, invalid versions/state, changed resource caps, completed permissions, file round trips/backups, and failed writes. All 38 C# sources pass syntax parsing. Source asset verification checks both scenes, both profiles/atlases, five story/dialogue references, all 14 audio clips, GUID coverage, original input identities, and controls.
+Twenty-eight standalone NUnit tests pass for combat/resources/permission order, story order, dialogue completion/cancellation, checkpoint continuity/migration, invalid versions/state, changed resource caps, completed permissions, file round trips/backups, and failed writes. All 41 C# sources pass syntax parsing. Source asset verification checks both scenes, both profiles/atlases, five story/dialogue references, all 15 audio clips, GUID coverage, original input identities, and controls.
 
 These checks do not run Unity APIs. The user reported the first presentation transition working in Unity. The new story sequence, Unity asset/JSON tests, and standalone build testing remain pending.
 

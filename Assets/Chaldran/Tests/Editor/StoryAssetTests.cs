@@ -8,6 +8,19 @@ namespace Chaldran.Tests
     public sealed class StoryAssetTests
     {
         [Test]
+        public void RetroProfileImportsWithFastTypingAndIntroductoryDialogue()
+        {
+            PresentationProfile profile = AssetDatabase.LoadAssetAtPath<PresentationProfile>(
+                "Assets/Chaldran/Data/QuarantinePresentation.asset");
+            Assert.That(profile, Is.Not.Null);
+            Assert.That(profile.retroDialogue, Is.True);
+            Assert.That(profile.charactersPerSecond, Is.EqualTo(60));
+            Assert.That(profile.typingSound, Is.Not.Null);
+            Assert.That(profile.introduction, Is.Not.Null);
+            Assert.That(profile.introduction.IsValid, Is.True);
+        }
+
+        [Test]
         public void CheckedInStoryHasOrderedBeatsAndCompleteDialogueReferences()
         {
             DirectoryStoryDefinition story = AssetDatabase.LoadAssetAtPath<DirectoryStoryDefinition>(

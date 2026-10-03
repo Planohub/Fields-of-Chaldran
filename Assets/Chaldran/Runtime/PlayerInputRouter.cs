@@ -44,7 +44,7 @@ namespace Chaldran
             if (run.Dialogue.IsOpen)
             {
                 if (pause.WasPressedThisFrame()) run.Dialogue.Cancel();
-                else if (interact.WasPressedThisFrame() || retry.WasPressedThisFrame()) run.Dialogue.Advance();
+                else if (interact.WasPressedThisFrame() || retry.WasPressedThisFrame() || attack.WasPressedThisFrame()) run.Dialogue.Advance();
                 return;
             }
             if (newTrial.WasPressedThisFrame()) { run.NewTrial(); return; }

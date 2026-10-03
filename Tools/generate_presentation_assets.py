@@ -100,6 +100,7 @@ def write_wave(path, rate, samples):
 
 
 def audio():
+    typing_sound()
     # The melody is shared; the second tier adds harmony and a gentler timbre.
     notes = [261.63,329.63,392,329.63,293.66,349.23,440,392]
     for rich, rate, filename in [(False,8000,'QuarantineMusic.wav'),(True,16000,'Overland/Music.wav')]:
@@ -126,6 +127,18 @@ def audio():
             env=min(1,t/.006)*(1-p)**1.8
             samples.append(int(sig*env*22000))
         write_wave(BASE/'Audio/Overland'/(name+'.wav'),rate,samples)
+
+
+def typing_sound():
+    rate = 8000
+    duration = .025
+    samples = []
+    for i in range(int(rate * duration)):
+        t = i / rate
+        envelope = min(1, t / .002) * max(0, 1 - t / duration) ** 2
+        square = 1 if math.sin(2 * math.pi * 880 * t) >= 0 else -1
+        samples.append(int(square * envelope * 3500))
+    write_wave(BASE/'Audio/QuarantineTyping.wav', rate, samples)
 
 
 if __name__ == '__main__':

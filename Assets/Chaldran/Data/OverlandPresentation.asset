@@ -32,3 +32,8 @@ MonoBehaviour:
   music: {fileID: 8300000, guid: f03aec1158845c0b8abce7433eefc344, type: 3}
   musicVolume: 0.12
   walkingFrames: 020000000b000000020000000f000000
+  retroDialogue: 0
+  charactersPerSecond: 0
+  typingSound: {fileID: 0}
+  typingVolume: 0.14
+  introduction: {fileID: 0}

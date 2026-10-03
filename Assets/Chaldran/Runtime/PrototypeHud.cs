@@ -16,6 +16,10 @@ namespace Chaldran
         private Image arrivalCurtain;
         private GameObject dialogueOverlay;
         private TextMeshProUGUI dialogueSpeaker, dialogueBody, dialogueControls;
+        private RectTransform directiveRect, controlsRect, skillRect, conversationRect, noticeRect, interactionRect;
+        private TextMeshProUGUI controlsText;
+        private GameObject noticePanel;
+        private float layoutWidth = -1f;
         private float arrivalUntil;
         private RenderTexture buffer;
         private readonly List<FloatingNumber> numbers = new List<FloatingNumber>();
@@ -64,14 +68,13 @@ namespace Chaldran
             essenceText = Text("Essence", stats, new Vector2(22, -76), new Vector2(260, 20), 15, "", ink);
             resonanceText = Text("Resonance", stats, new Vector2(22, -112), new Vector2(260, 20), 15, "", ink);
 
-            RectTransform directive = Panel("Directive", root, Vector2.one, Vector2.one, new Vector2(-24, -24), new Vector2(326, 152), panelColor);
-            Text("Directive heading", directive, new Vector2(14, -12), new Vector2(298, 24), 16,
+            RectTransform directive = Panel("Directive", root, new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -24), new Vector2(580, 120), panelColor);
+            directiveRect = directive;
+            Text("Directive heading", directive, new Vector2(14, -12), new Vector2(552, 24), 16,
                 run.IsOverland ? run.StoryDefinition.questTitle : "CURRENT DIRECTIVE", new Color(0.89f, 0.73f, 0.44f));
-            objective = Text("Objective", directive, new Vector2(14, -44), new Vector2(298, 66), 17, "", ink);
-            Text("Override", directive, new Vector2(14, -112), new Vector2(298, 26), 13,
-                $"OVERRIDE {run.Stats.Vitals.Override:0}  /  CRIT {run.Stats.Vitals.CritChance:P0}  /  PEN {run.Stats.Vitals.Penetration:P0}", new Color(0.5f, 0.72f, 0.78f));
+            objective = Text("Objective", directive, new Vector2(14, -44), new Vector2(552, 64), 21, "", ink);
 
-            RectTransform enemy = Panel("Enemy status", root, new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -24), new Vector2(240, 76), panelColor);
+            RectTransform enemy = Panel("Enemy status", root, Vector2.one, Vector2.one, new Vector2(-24, -24), new Vector2(240, 76), panelColor);
             enemyPanel = enemy.gameObject;
             enemyPanel.SetActive(!run.IsOverland);
             Text("Enemy heading", enemy, new Vector2(12, -10), new Vector2(216, 22), 15, "CLOCKWORK SENTINEL", new Color(0.93f, 0.73f, 0.44f));
@@ -79,11 +82,19 @@ namespace Chaldran
             enemyText = Text("Enemy health", enemy, new Vector2(12, -53), new Vector2(216, 18), 12, "", ink);
 
             RectTransform controls = Panel("Controls", root, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 18), new Vector2(710, 62), panelColor);
-            Text("Controls text", controls, new Vector2(14, -9), new Vector2(682, 46), 15,
+            controlsRect = controls;
+            controlsText = Text("Controls text", controls, new Vector2(14, -9), new Vector2(682, 46), 15,
                 "WASD move   SHIFT sprint   MOUSE aim   LMB strike   RMB hold block\nE use   Q burst   ESC pause   C checkpoint   F5 new trial   ENTER retry", ink);
-            prompt = CenterText("Interaction prompt", new Vector2(0.5f, 0), new Vector2(0, 100), new Vector2(760, 34), 21, new Color(0.55f, 1f, 0.88f));
-            message = CenterText("Notice", new Vector2(0.5f, 0), new Vector2(0, 148), new Vector2(860, 50), 18, ink);
+            interactionRect = Panel("Interaction focus", worldRect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(520, 58), panelColor);
+            prompt = CenterText("Interaction prompt", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(496, 44), 21,
+                new Color(0.55f, 1f, 0.88f), interactionRect);
+            noticeRect = Panel("Important notice", root, new Vector2(0.5f, 1), new Vector2(0.5f, 1),
+                new Vector2(0, -164), new Vector2(660, 84), panelColor);
+            noticePanel = noticeRect.gameObject;
+            message = CenterText("Notice", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(628, 64), 21, ink, noticeRect);
             RectTransform skill = Panel("Ability", root, Vector2.right, Vector2.right, new Vector2(-24, 18), new Vector2(214, 62), panelColor);
+            skillRect = skill;
             ability = Text("Ability status", skill, new Vector2(12, -9), new Vector2(190, 46), 16, "", new Color(1f, 0.76f, 0.43f));
 
             overlay = Panel("Paused or finished", root, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero,
@@ -93,11 +104,21 @@ namespace Chaldran
             overlay.SetActive(false);
             dialogueOverlay = Panel("Dialogue shade", root, Vector2.zero, Vector2.zero, Vector2.zero,
                 Vector2.zero, new Color(0f, 0f, 0f, 0.25f), true).gameObject;
-            RectTransform conversation = Panel("Conversation", dialogueOverlay.transform,
-                new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 105), new Vector2(940, 292), panelColor);
-            dialogueSpeaker = Text("Speaker", conversation, new Vector2(24, -22), new Vector2(892, 28), 22, "", run.Presentation.hudAccent);
-            dialogueBody = Text("Dialogue text", conversation, new Vector2(24, -65), new Vector2(892, 160), 22, "", ink);
-            dialogueControls = Text("Dialogue controls", conversation, new Vector2(24, -248), new Vector2(892, 28), 16, "", new Color(0.89f, 0.73f, 0.44f));
+            bool retro = run.Presentation.retroDialogue;
+            Vector2 dialogAnchor = new Vector2(0.5f, retro ? 1 : 0);
+            conversationRect = Panel("Conversation frame", dialogueOverlay.transform, dialogAnchor, dialogAnchor,
+                new Vector2(0, retro ? -20 : 105), new Vector2(retro ? 1100 : 940, retro ? 260 : 292),
+                retro ? new Color(0.76f, 0.88f, 0.96f) : panelColor);
+            RectTransform conversation = Panel("Conversation ink", conversationRect, Vector2.zero, Vector2.zero,
+                Vector2.zero, Vector2.zero, new Color(0.015f, 0.025f, 0.06f, 1f), true);
+            conversation.offsetMin = Vector2.one * (retro ? 5 : 1);
+            conversation.offsetMax = -conversation.offsetMin;
+            dialogueSpeaker = Text("Speaker", conversation, new Vector2(24, -20), new Vector2(892, 28), 22, "", run.Presentation.hudAccent);
+            dialogueBody = Text("Dialogue text", conversation, new Vector2(24, -62), new Vector2(892, retro ? 130 : 160), retro ? 24 : 22, "", ink);
+            dialogueBody.richText = false;
+            dialogueBody.characterSpacing = retro ? 1.5f : 0f;
+            dialogueBody.fontStyle = retro ? FontStyles.Bold : FontStyles.Normal;
+            dialogueControls = Text("Dialogue controls", conversation, new Vector2(24, retro ? -216 : -246), new Vector2(892, 30), 16, "", new Color(0.89f, 0.73f, 0.44f));
             dialogueOverlay.SetActive(false);
             if (run.IsOverland)
             {
@@ -125,19 +146,29 @@ namespace Chaldran
         private void Update()
         {
             if (run == null || root == null) return;
+            RefreshLayout();
             bool talking = run.Dialogue.IsOpen;
             dialogueOverlay.SetActive(talking);
             if (talking)
             {
                 DialogueSession session = run.Dialogue.Session;
-                DialogueLine line = run.Dialogue.Current.lines[session.LineIndex];
-                dialogueSpeaker.text = line.speaker;
-                dialogueBody.text = line.text;
-                dialogueControls.text = $"{session.LineIndex + 1} / {session.LineCount}    E or ENTER: next    ESC: close";
+                dialogueBody.maxVisibleCharacters = run.Dialogue.Reveal.VisibleCharacters;
+                dialogueControls.text = $"{session.LineIndex + 1} / {session.LineCount}    CLICK / E / ENTER: "
+                    + (run.Dialogue.Reveal.Complete ? "next" : "show page") + "    ESC: close";
             }
             prompt.text = talking ? "" : run.IsOverland && run.Story.CompletedSteps == 0 ? "[E] Take in the changed world"
                 : run.Interactor.Target != null ? run.Interactor.Target.Prompt : "";
             message.text = Time.unscaledTime < run.MessageUntil ? run.Message : "";
+            noticePanel.SetActive(!talking && !string.IsNullOrEmpty(message.text));
+            interactionRect.gameObject.SetActive(!talking && run.IsActive && !string.IsNullOrEmpty(prompt.text));
+            if (interactionRect.gameObject.activeSelf)
+            {
+                Vector3 focus = run.Interactor.Target != null ? run.Interactor.Target.transform.position : run.Stats.transform.position;
+                Vector3 viewport = run.WorldCamera.WorldToViewportPoint(focus);
+                float edge = Mathf.Min(0.49f, (interactionRect.sizeDelta.x * 0.5f + 12f) / Mathf.Max(1f, worldRect.rect.width));
+                Vector2 anchor = new Vector2(Mathf.Clamp(viewport.x, edge, 1f - edge), Mathf.Clamp(viewport.y + 0.08f, 0.24f, 0.68f));
+                interactionRect.anchorMin = interactionRect.anchorMax = anchor;
+            }
             ability.text = !run.Progress.HasWeapon ? "Q  ASHEN BURST\nRecover your weapon"
                 : run.Combat.BurstCooldownRemaining > 0f ? $"Q  ASHEN BURST\n{run.Combat.BurstCooldownRemaining:0.0}s cooldown"
                 : $"Q  ASHEN BURST\nReady / {run.Balance.burstCost:0} Resonance";
@@ -174,6 +205,54 @@ namespace Chaldran
                 number.Text.rectTransform.anchoredPosition = new Vector2(0, 24f + number.Age * 40f);
                 number.Text.alpha = 1f - number.Age / 0.75f;
             }
+        }
+
+        public int PrepareDialoguePage(DialogueLine line)
+        {
+            RefreshLayout();
+            dialogueOverlay.SetActive(true);
+            dialogueSpeaker.text = line.speaker;
+            dialogueBody.text = line.text;
+            dialogueBody.maxVisibleCharacters = 0;
+            dialogueBody.ForceMeshUpdate();
+            return dialogueBody.textInfo.characterCount;
+        }
+
+        public bool HasTypingCharacter(int from, int to)
+        {
+            int limit = Mathf.Min(to, dialogueBody.textInfo.characterCount);
+            for (int i = Mathf.Max(0, from); i < limit; i++)
+                if (char.IsLetterOrDigit(dialogueBody.textInfo.characterInfo[i].character)) return true;
+            return false;
+        }
+
+        private void RefreshLayout()
+        {
+            float width = root.rect.width;
+            if (Mathf.Abs(layoutWidth - width) < 0.5f) return;
+            layoutWidth = width;
+            bool compact = width < 1240f;
+            float available = Mathf.Max(100f, width - 48f);
+            directiveRect.sizeDelta = new Vector2(Mathf.Min(580f, available), 120f);
+            directiveRect.anchoredPosition = new Vector2(0, compact ? -190 : -24);
+            objective.rectTransform.sizeDelta = new Vector2(directiveRect.sizeDelta.x - 28f, 64f);
+            noticeRect.sizeDelta = new Vector2(Mathf.Min(660f, available), 84f);
+            noticeRect.anchoredPosition = new Vector2(0, compact ? -322 : -190);
+            message.rectTransform.sizeDelta = new Vector2(noticeRect.sizeDelta.x - 32f, 64f);
+            controlsRect.sizeDelta = new Vector2(Mathf.Min(710f, available), compact ? 86 : 62);
+            controlsText.rectTransform.sizeDelta = controlsRect.sizeDelta - new Vector2(28, 16);
+            controlsText.fontSize = compact ? 14 : 15;
+            controlsText.text = compact
+                ? "WASD move   SHIFT sprint   MOUSE aim\nLMB strike   RMB block   E use   Q burst\nESC pause   C checkpoint   F5 new trial   ENTER retry"
+                : "WASD move   SHIFT sprint   MOUSE aim   LMB strike   RMB hold block\nE use   Q burst   ESC pause   C checkpoint   F5 new trial   ENTER retry";
+            skillRect.anchoredPosition = new Vector2(-24, compact ? 118 : 18);
+            float dialogWidth = Mathf.Min(run.Presentation.retroDialogue ? 1100 : 940, available);
+            conversationRect.sizeDelta = new Vector2(dialogWidth, run.Presentation.retroDialogue ? 260 : 292);
+            foreach (TextMeshProUGUI label in new[] { dialogueSpeaker, dialogueBody, dialogueControls })
+                label.rectTransform.sizeDelta = new Vector2(dialogWidth - 60f, label.rectTransform.sizeDelta.y);
+            float promptWidth = Mathf.Min(520f, available);
+            interactionRect.sizeDelta = new Vector2(promptWidth, 58);
+            prompt.rectTransform.sizeDelta = new Vector2(promptWidth - 24, 44);
         }
 
         public Vector2 PointerToWorld(Vector2 screen)

@@ -19,6 +19,12 @@ namespace Chaldran
         public AudioClip music;
         [Range(0f, 1f)] public float musicVolume = 0.12f;
         public int[] walkingFrames = { 2 };
+        [Header("Dialogue")]
+        public bool retroDialogue;
+        [Range(0f, 200f)] public float charactersPerSecond;
+        public AudioClip typingSound;
+        [Range(0f, 1f)] public float typingVolume = 0.14f;
+        public DialogueDefinition introduction;
 
         public bool IsValid => atlas != null && cellPixels >= 8 && columns >= 1 && rows >= 1
             && columns * rows >= 16 && atlas.width == columns * cellPixels

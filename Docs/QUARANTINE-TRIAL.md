@@ -32,7 +32,7 @@ For nonnegative Override `O`:
 
 Essence increases the health pool; armor is a separate mitigation value. This prevents the same durability bonus being applied twice. Resource and damage input validation prevents negative/NaN/infinite values from corrupting current values. The normal balance values remain editable in the ScriptableObject.
 
-The sentinel is a small state machine: dormant, hunting, warning, recovery, defeated. It stops to warn before striking a fixed circular area. It does not navigate around obstacles when line of sight is blocked; pathfinding is future work. Player attacks and interactions also check walls.
+The sentinel is a small state machine: dormant, hunting, warning, recovery, defeated. It stops to warn before striking a fixed circular area. It now uses bounded room navigation around obstacles when the direct approach is blocked; full dungeon navigation is future work. Player attacks and interactions also check walls.
 
 ## Unity checks before merging
 
@@ -53,12 +53,12 @@ The sentinel is a small state machine: dormant, hunting, warning, recovery, defe
 
 The October 1 recovery copied the earlier session's uncommitted implementation into a separate checkout. The recovered implementation was reviewed and the checks below were rerun. Progression now rejects sentinel defeat before weapon recovery and duplicate defeat notifications; resource regeneration stops while paused or after completion. Retry reloads the active scene by its full path.
 
-- Current combat, checkpoint, and story test sources compiled with Roslyn in C# 9 mode and ran against NUnit 3.14.0: 19 passed, 0 failed.
-- Current C# syntax parsing: 38 files, no parse errors.
-- Metadata uniqueness and coverage; both scene GUIDs and scene IDs; build scene entries; preserved original input IDs and valid added bindings; correct layers; two atlas sizes; fourteen unclipped mono WAV files.
+- Current combat, checkpoint, and story test sources compiled with Roslyn in C# 9 mode and ran against NUnit 3.14.0: 28 passed, 0 failed.
+- Current C# syntax parsing: 41 files, no parse errors.
+- Metadata uniqueness and coverage; both scene GUIDs and scene IDs; build scene entries; preserved original input IDs and valid added bindings; correct layers; two atlas sizes; fifteen unclipped mono WAV files.
 - Diff whitespace checks and visual inspection of the generated pixel atlas.
 
-These checks do not establish Unity API compilation or runtime behavior. The authoring environment has no Unity Editor. The user reported the trial and first presentation transition working in Unity. Record the new opening story playtest and standalone build results before accepting the updated branch. See [the story checks](USER-DIRECTORY-OPENING.md).
+These checks do not establish Unity API compilation or runtime behavior. The authoring environment has no Unity Editor. The user reported the trial and first presentation transition working in Unity. The opening story was also reported working. Record the retro/readability, guard pursuit, and standalone build results before accepting the updated branch. See [the story checks](USER-DIRECTORY-OPENING.md).
 
 ## Asset pipeline
 

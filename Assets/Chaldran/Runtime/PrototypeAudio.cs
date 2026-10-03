@@ -10,6 +10,9 @@ namespace Chaldran
         private AudioClip[] clips;
         private AudioSource music;
         private float musicVolume;
+        private AudioSource typing;
+        private AudioClip typingClip;
+        private float nextTyping;
 
         public void Initialize(PresentationProfile presentation)
         {
@@ -18,6 +21,11 @@ namespace Chaldran
             source.playOnAwake = false;
             source.spatialBlend = 0f;
             source.volume = 0.35f;
+            typing = gameObject.AddComponent<AudioSource>();
+            typing.playOnAwake = false;
+            typing.spatialBlend = 0f;
+            typing.volume = presentation.typingVolume;
+            typingClip = presentation.typingSound;
             AudioListener.pause = false;
             music = gameObject.AddComponent<AudioSource>();
             music.playOnAwake = false;
@@ -30,6 +38,13 @@ namespace Chaldran
         }
 
         public void FadeMusic(float fraction) { if (music != null) music.volume = musicVolume * Mathf.Clamp01(fraction); }
+        public void StopTyping() { if (typing != null) typing.Stop(); }
+        public void PlayTyping()
+        {
+            if (typingClip == null || typing.volume <= 0 || Time.unscaledTime < nextTyping) return;
+            nextTyping = Time.unscaledTime + 0.04f;
+            typing.PlayOneShot(typingClip);
+        }
 
         public void Play(TrialSound sound)
         {

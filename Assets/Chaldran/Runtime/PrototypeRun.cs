@@ -47,6 +47,12 @@ namespace Chaldran
 
         private IEnumerator Start()
         {
+            if (!IsOverland)
+            {
+                yield return new WaitForSecondsRealtime(0.2f);
+                if (IsActive && Presentation.introduction != null) Dialogue.Begin(Presentation.introduction, null);
+                yield break;
+            }
             if (!IsOverland || Story.CompletedSteps != 0) yield break;
             yield return new WaitForSecondsRealtime(0.85f);
             if (!arrivalPrompted && IsActive && Story.CompletedSteps == 0) BeginStoryBeat(DirectoryBeat.Arrival);

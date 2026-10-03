@@ -40,9 +40,9 @@ The completed beat count records the mandatory conversations and discovery of th
 
 ## Validation and Unity acceptance
 
-Nineteen standalone NUnit tests cover combat, permissions, resources, ordered story progression, dialogue completion/cancellation, saved beat continuity, version-1 migration, invalid state, and file write failures. All 38 C# files pass syntax parsing. Source checks cover both scenes, profiles, atlases, all five story-to-dialogue references, GUIDs, existing input identities, and 14 audio clips.
+Twenty-eight standalone NUnit tests cover combat, permissions, resources, ordered story progression, dialogue completion/cancellation, saved beat continuity, version-1 migration, invalid state, and file write failures. All 41 C# files pass syntax parsing. Source checks cover both scenes, profiles, atlases, all five story-to-dialogue references, GUIDs, existing input identities, and 15 audio clips.
 
-Three additional EditMode tests are checked in for actual Unity asset import and JsonUtility serialization/migration. They require Unity and have not run in the authoring environment. The user reported the preceding graphics/sound transition working; this new story sequence still needs a Unity playtest.
+Four additional EditMode tests are checked in for actual Unity asset import and JsonUtility serialization/migration. They require Unity and have not run in the authoring environment. The user reported this opening story working in Unity. The subsequent retro/readability and guard-pursuit pass needs a new playtest; see [its checks](RETRO-READABILITY.md).
 
 1. Import in Unity 6000.5.6f1; confirm no red Console errors. Run all EditMode tests in Test Runner.
 2. Resume the existing checkpoint with C. Confirm the new arrival dialogue opens and the weapon/resources remain intact.

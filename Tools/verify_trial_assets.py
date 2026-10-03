@@ -56,6 +56,13 @@ def verify():
     identity = re.search(r'^guid: (\w+)', (TRIAL / 'Data/Story/UserDirectoryOpening.asset.meta').read_text(), re.M).group(1)
     overland = (TRIAL / 'Scenes/OverlandPrototype.unity').read_text()
     assert f'directoryStory: {{fileID: 11400000, guid: {identity}, type: 2}}' in overland
+    quarantine = (TRIAL / 'Data/QuarantinePresentation.asset').read_text()
+    assert '  retroDialogue: 1\n' in quarantine and '  charactersPerSecond: 60\n' in quarantine
+    assert re.search(r'typingSound: \{fileID: 8300000, guid: ([0-9a-f]{32})', quarantine).group(1) in identities
+    intro = (TRIAL / 'Data/Story/QuarantineIntroduction.asset').read_text()
+    intro_guid = re.search(r'^guid: (\w+)', (TRIAL / 'Data/Story/QuarantineIntroduction.asset.meta').read_text(), re.M).group(1)
+    assert f'introduction: {{fileID: 11400000, guid: {intro_guid}, type: 2}}' in quarantine
+    assert len(re.findall(r'^  - speaker:', intro, re.M)) == 2
 
     inputs = json.loads((ASSETS / 'PlayerControls.inputactions').read_text())['maps'][0]
     actions = {action['name']: action['id'] for action in inputs['actions']}
@@ -81,8 +88,8 @@ def verify():
             assert clip.getnchannels() == 1 and clip.getsampwidth() == 2 and clip.getframerate() in [8000,16000,22050,44100]
             samples = struct.unpack('<' + 'h' * clip.getnframes(), clip.readframes(clip.getnframes()))
             assert samples and max(abs(value) for value in samples) < 32767, f'Clipped audio: {path}'
-    assert len(clips) == 14
-    print('PASS metadata, two scenes/profiles/atlases, five ordered story/dialogue references, layers, preserved input IDs, and 14 audio clips.')
+    assert len(clips) == 15
+    print('PASS metadata, scenes/profiles/atlases, ordered story/dialogue references, retro introduction/typing cue, input IDs, and 15 audio clips.')
 
 
 if __name__ == '__main__':
