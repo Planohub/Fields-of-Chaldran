@@ -2,6 +2,8 @@
 
 ## Story constraint
 
+For the October 4 direction, see [Story and fidelity roadmap](STORY-AND-FIDELITY-ROADMAP.md): the Oracle library stays 16-bit, the rescue mission follows that distinct encounter, and later 8-bit prisons with a 16-bit hero are a proposed rendering experiment. The current single-profile renderer does not implement mixed fidelity.
+
 Graphics and sound intentionally improve as part of the story. The quarantine tutorial remains primitive. Leaving the personal quarantine unlocks the first richer presentation in the User Directory; it is not an escape from the Sorruin Engine itself. Visual tiers are separate from divine advancement. This implementation adds a small proof of the first transformation, not the full opening chapter or a new plot branch.
 
 The initial profiles use the earlier 8-bit-style tutorial to 16-bit-style overland plan. These are art/audio styles within one Unity game. Starting with a more restricted 4-bit-style palette remains an art direction decision; the profiles expose the settings without changing combat.

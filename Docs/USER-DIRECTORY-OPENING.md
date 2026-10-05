@@ -54,4 +54,4 @@ Four additional EditMode tests are checked in for actual Unity asset import and 
 8. Press F5, then C to check the prior story resumes. Complete a new tutorial and verify the opening restarts at arrival.
 9. Check dialogue wrapping, objective readability, aim, and paths at 720p, 1080p, narrow, and ultrawide sizes. Build for Windows and repeat the route and continue tests outside the Editor.
 
-Once this approach passes, the next playable extension is the compressed library's loop/anchor/permission mechanics and the Oracle rescue sequence. Asset replacement can proceed through the existing tier profiles; see [art handoff](ART-HANDOFF.md).
+The approach and subsequent readability pass have now been user-playtested. The next playable extension is the 16-bit compressed library's loop/anchor/permission mechanics and a distinct Oracle encounter; its exact outcome remains a story decision. See [the updated direction](STORY-AND-FIDELITY-ROADMAP.md) and [chapter draft](ORACLE-LIBRARY-DRAFT.md). Asset replacement can proceed later through the existing tier profiles; see [art handoff](ART-HANDOFF.md).

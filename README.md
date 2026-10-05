@@ -50,7 +50,7 @@ This is a development trial. The Ashen Crown is assigned for testing; full domai
 
 ## Validation
 
-Twenty-eight tests across the combat, checkpoint, and story suites passed as standalone C# tests using NUnit 3.14.0. All 41 C# files passed a syntax parse. Metadata, both scenes/profiles/atlases, five story/dialogue references, input bindings, and all 15 audio clips passed source checks. The user reported the trial, presentation transition, and User Directory story working in Unity; the retro/readability and guard-pursuit update needs a Unity playtest. Four additional asset/JsonUtility tests are provided for Unity EditMode.
+Twenty-eight tests across the combat, checkpoint, and story suites passed as standalone C# tests using NUnit 3.14.0. All 41 C# files passed a syntax parse. Metadata, both scenes/profiles/atlases, five story/dialogue references, input bindings, and all 15 audio clips passed source checks. The user reported the trial, presentation transition, User Directory story, and subsequent retro/readability update working in Unity. Four additional asset/JsonUtility tests are provided for Unity EditMode.
 
 **Unity compilation, Play Mode, profiling, audio playback, and a Windows build have not been run in the authoring environment.** Open **Window → General → Test Runner** to run the EditMode tests in Unity, then follow [the retro/readability playtest checks](Docs/RETRO-READABILITY.md). The branch should remain under review until those checks pass.
 
@@ -58,4 +58,6 @@ Optional source asset verification: `python Tools/verify_trial_assets.py`. Repro
 
 ## Next development milestone
 
-Validate the retro/readability pass in Unity. Upcoming priorities are avatar/sword animation, a longer purposeful prison tutorial, and the compressed library. See [the recorded milestones](Docs/NEXT-MILESTONES.md). See [the opening sequence](Docs/USER-DIRECTORY-OPENING.md), [art handoff](Docs/ART-HANDOFF.md), [presentation progression](Docs/PRESENTATION-PROGRESSION.md), and [combat notes](Docs/QUARANTINE-TRIAL.md).
+The user has now playtested the retro/readability pass successfully. The next groundwork is recorded in [the story/fidelity roadmap](Docs/STORY-AND-FIDELITY-ROADMAP.md): a distinct 16-bit Oracle chapter, followed by the mission to free other gods and an experiment with 8-bit prisons hosting the 16-bit hero. No immediate 32-bit upgrade is planned. Hacker terminology and grayboxing remain intentional.
+
+See [the Oracle chapter draft](Docs/ORACLE-LIBRARY-DRAFT.md), [Unity 6.6 trial upgrade](Docs/UNITY-6.6-UPGRADE.md), and [recorded animation/tutorial milestones](Docs/NEXT-MILESTONES.md). These are design and upgrade instructions; the library, mixed-fidelity renderer, and Editor migration are not yet implemented. See also [the opening sequence](Docs/USER-DIRECTORY-OPENING.md), [art handoff](Docs/ART-HANDOFF.md), [presentation progression](Docs/PRESENTATION-PROGRESSION.md), and [combat notes](Docs/QUARANTINE-TRIAL.md).
