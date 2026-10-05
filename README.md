@@ -79,12 +79,18 @@ The library's inner archive, warden, relic, final Oracle outcome and wider rescu
 
 **35 standalone C# tests passed** across combat, permissions, resources, checkpoints, dialogue and ordered chapter progress. **All 46 C# sources passed syntax parsing.** Source checks passed for metadata, three scenes/profiles, both chapters and their dialogue references, atlases, retro cue, input identities and all 15 audio clips.
 
-Seven additional Unity EditMode tests cover actual asset import, JsonUtility and anchor/loop component state. **Those require Unity and have not run in the authoring environment.** The user already playtested the preceding content in 6000.6.4f1 with no Console errors. The new library still needs Unity compilation, Play Mode and Windows build checks. An earlier Editor exit error remains unresolved.
+Seven additional Unity EditMode tests cover actual asset import, JsonUtility and anchor/loop component state. **Those require Unity and have not run in the authoring environment.** The user playtested the preceding content and, on October 5, the new library section in 6000.6.4f1 with expected behavior and no reported errors. The library's motivation and puzzle were confusing, and a visible Oracle was missing. EditMode results and a Windows build remain unverified. An earlier Editor exit error remains unresolved.
 
 Run **Window → General → Test Runner → EditMode**, then follow [the library acceptance checks](Docs/ORACLE-LIBRARY-PLAYTEST.md). Optional source verification: `python Tools/verify_trial_assets.py`. Python is not needed to play the checked-in scenes.
 
+## October 5 story review
+
+Recorded the successful library playthrough and the confusing story/puzzle feedback. Added a proposed opening-to-Oracle story spine, rewrote the encounter draft around a visible meeting, and updated the roadmap/playtest status. New story explanations remain proposals for discussion.
+
 ## Next development milestone
 
-Playtest this section, then build the inner archive: establish the Oracle's specific limitation, design the containment response and relic function, and write the conversation that opens the mission to free other gods. Keep the library at 16-bit. The next rendering experiment comes after that encounter.
+The immediate priority is story clarity: give the hero a reason to seek the Oracle, show the Oracle beyond the gate, explain one redirect, make route editing a deliberate action, and deliver a direct meeting. The [story spine](Docs/STORY-SPINE.md) and [revised library draft](Docs/ORACLE-LIBRARY-DRAFT.md) propose that sequence. **These latest changes are documentation only; the proposed scene revision is not implemented yet.**
+
+After that meeting is clear, develop the inner archive, containment response, relic function and wider rescue handoff. Keep the library at 16-bit. The next rendering experiment follows the Oracle encounter.
 
 See [story/fidelity roadmap](Docs/STORY-AND-FIDELITY-ROADMAP.md), [Oracle chapter draft](Docs/ORACLE-LIBRARY-DRAFT.md), [remaining milestones](Docs/NEXT-MILESTONES.md), [Unity migration record](Docs/UNITY-6.6-UPGRADE.md), [User Directory opening](Docs/USER-DIRECTORY-OPENING.md), [art handoff](Docs/ART-HANDOFF.md), [presentation progression](Docs/PRESENTATION-PROGRESSION.md), and [combat notes](Docs/QUARANTINE-TRIAL.md).

@@ -1,5 +1,11 @@
 # Oracle library opening: delivery and playtest
 
+## October 5 user result
+
+Shawn reports that this section behaved as expected and produced no errors. He found its purpose and puzzle confusing, and the absence of a visible Oracle weakened the payoff. This confirms the reported playthrough, not every individual acceptance check below; EditMode and Windows build results remain unreported.
+
+The next task is the story revision in [STORY-SPINE.md](STORY-SPINE.md) and [ORACLE-LIBRARY-DRAFT.md](ORACLE-LIBRARY-DRAFT.md). Those proposals are documentation only. The current playable sequence is described below.
+
 ## Delivered section
 
 The User Directory threshold now mounts a separate 16-bit library scene. A blue corridor route returns the avatar to the entrance, passing the same red index book. The first repeat unlocks contact with the Oracle. Completing that conversation identifies the anchor. Completing the anchor interaction disables the redirect and physically removes the barrier. The player can then cross to the archive landing.
@@ -68,4 +74,4 @@ If v3 is absent, loading tries v2, then v1 if v2 is also absent. Valid v2 saves 
 
 35 standalone C# tests passed, including seven new library order/cancellation/migration/state checks. All 46 C# sources passed syntax parsing. Asset verification passed for three scenes/profiles, both chapters/dialogue references, metadata, atlases, existing input identities, retro cue and 15 audio clips. These checks do not establish Unity compilation, rendered layout, physics behavior, audio playback or Windows build success.
 
-Next: playtest this section, then build the inner archive encounter and decide the warden/relic/Oracle outcome before the wider mission handoff.
+Next: revise the purpose, route interaction and visible Oracle meeting before extending the inner archive. Decide the warden/relic/Oracle outcome before the wider mission handoff.

@@ -1,6 +1,6 @@
 # Story and fidelity direction
 
-Recorded from Shawn's October 4, 2026 direction. This document supersedes earlier suggestions to soften the computer terminology or treat the Oracle as an ordinary imprisoned god. The first library opening is now playable; its delivery and pending Unity checks are recorded in [ORACLE-LIBRARY-PLAYTEST.md](ORACLE-LIBRARY-PLAYTEST.md). The full Oracle encounter and mixed-fidelity renderer remain upcoming.
+Recorded from Shawn's October 4, 2026 direction. This document supersedes earlier suggestions to soften the computer terminology or treat the Oracle as an ordinary imprisoned god. The first library opening is now playable; its delivery, successful reported playthrough and remaining verification are recorded in [ORACLE-LIBRARY-PLAYTEST.md](ORACLE-LIBRARY-PLAYTEST.md). The playtest exposed unclear motivation and an absent visible Oracle. Story clarity and an actual meeting now take priority; see [the story spine](STORY-SPINE.md). The full Oracle encounter and mixed-fidelity renderer remain upcoming.
 
 ## Established direction
 
@@ -48,8 +48,8 @@ Use stable chapter/location IDs for future saves. Preserve the numeric meaning o
 ## Delivery order
 
 1. **Unity 6.6 adopted.** The user-tested migration to **6000.6.4f1** is committed separately on the shared branch. Continue from the upgraded copy. Keep the reported exit error open for diagnosis and verify a Windows build. See UNITY-6.6-UPGRADE.md.
-2. **First Oracle contact delivered; inner archive writing next.** The opening establishes a restricted channel and an anchor the hero can interrupt. Resolve the Oracle's specific limitation, motivation, final outcome and wider rescue handoff before building the full encounter. Review ORACLE-LIBRARY-DRAFT.md.
-3. **First 16-bit library section delivered; playtest next.** The loop, anchor, physical barrier, restricted contact and landing have version-3 checkpoint continuity. Run ORACLE-LIBRARY-PLAYTEST.md, then build the inner archive and warden/relic sequence.
+2. **Story clarity and visible meeting next.** The terminal contact worked but did not communicate a satisfying Oracle encounter. Draft a personal reason to enter, a visible destination, one explained redirect, an intentional route change and a direct meeting. Keep proposed new lore marked as draft. Review STORY-SPINE.md and ORACLE-LIBRARY-DRAFT.md.
+3. **First 16-bit library section functionally user-tested.** The October 5 playthrough produced no errors; the narrative needs revision. Implement the clarified meeting before extending the inner archive and warden/relic sequence. Existing version-3 checkpoint identities need explicit migration if the revised order changes their meaning.
 4. **First mixed-fidelity experiment.** Use a disposable 8-bit host room with the 16-bit hero. Verify silhouette/detail, occlusion, mouse aim, dialogue, audio, enter/exit, and continue. Add one meaningful permission advantage.
 5. **First god rescue.** Choose the god and their specific prison restriction with Shawn; connect that restriction to their identity. Reuse the presentation and save foundation rather than repeating the Oracle chapter.
 6. **Opening expansion and animation.** Turn the personal prison into a purposeful sequence, with visible sword/block actions. Connect what it teaches to the permission mechanics used later. Keep the fast retro dialogue and readable prompts.

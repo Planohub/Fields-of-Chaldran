@@ -1,73 +1,109 @@
-# Broken Oracle library: chapter groundwork
+# Broken Oracle library: revised encounter draft
 
-The mount, corridor loop, restricted first contact, anchor and archive landing are now implemented in the first playable section. See [delivery/playtest notes](ORACLE-LIBRARY-PLAYTEST.md). The inner archive, warden, relic and mission handoff below remain proposals; they do not establish the Oracle's origin, divine classification, or the next god's identity. The library stays at 16-bit, including its sound and the hero. The larger mission to free other gods begins after this encounter.
+## Why this revision comes first
 
-## Chapter purpose
+Shawn's October 5 playtest reached the current section's end with expected behavior and no errors. The experience nevertheless felt like bouncing off a wall and reading text to open a door. The absent Oracle left the action without a clear point.
 
-Move from following a damaged record to choosing an active mission. Give the Oracle a distinctive presence through how they observe the library's malfunction and respond to the hero. Reveal enough to make the next action understandable while leaving the Engine's full history for later chapters.
+The current code implements a redirect, terminal dialogue, anchor release and archive landing. **The sequence below is a proposed replacement for that presentation and story ordering; it has not been implemented.** Its purpose is to deliver a visible, understandable meeting before expanding the dungeon. It supersedes the earlier plan to stop at the landing before the Oracle appears.
 
-## Compact playable sequence
+See [the story spine](STORY-SPINE.md) for the connection from the personal quarantine to the later rescue mission. The library and hero remain 16-bit. The Oracle's exact identity remains unresolved.
 
-| Beat | Player action | Story/feedback | Proposed checkpoint boundary |
-| --- | --- | --- | --- |
-| Mount the library (implemented) | Use the completed threshold after the existing approach | Access is granted, but the interior route is virtualized | Entrance |
-| Encounter the loop (implemented) | Walk through a corridor and return to its start | A clear repeated landmark and changed system output establish the loop | No progress award for repetition |
-| Receive a signal (implemented) | Inspect a responding terminal or book | Oracle makes contact; the channel is restricted | Completed conversation |
-| Interrupt the anchor (implemented) | Follow its binding and disable it | The corridor becomes a stable route; an audit is queued, with no warden spawned yet | Anchor state |
-| Reach the archive landing (implemented) | Cross the now-open route | Contact holds; inner archive remains the next section | Landing state |
-| Enter the inner archive (planned) | Continue beyond the landing | Establish the Oracle's specific limitation | Encounter state |
-| Break the active restraint | Resolve a concise warden/permission encounter | Enable access to the relic and the chapter's agreed Oracle outcome | Warden and relic state |
-| Accept the wider objective | Finish the Oracle conversation | Other gods' prisons become the next actionable mission | Mission unlocked; return route available |
+## Scene promise
 
-The anchor mechanic needs a visible change, not just a dialogue flag. Completion/cancellation follows the existing dialogue rules. Earlier actions may be repeated without duplicating rewards. The exact ordering of the relic and warden should follow the relic's eventual function.
+The hero follows the Oracle's record to learn about their own confinement. On entry, the player sees a distinctive figure at a desk beyond a sealed archive gate. That figure notices them. The immediate objective is **Reach the Oracle beyond the archive gate.** The route is visible before the obstruction becomes a puzzle.
 
-## Sample first contact
+The library permits incoming visitors but rewrites their route back to the entrance. That is the obstacle keeping the visitor and Oracle apart. Show its behavior before explaining its technical name.
 
-System messages appear as brief technical output. Dialogue uses the existing readable text system. These lines are a voice sample rather than production dialogue assets.
+## Proposed sequence
 
-**SYSTEM:** `MOUNT /oracle/archive: granted. Route integrity: unresolved.`
+| Beat | What the player sees and does | What it means |
+| --- | --- | --- |
+| Find the Oracle | See the figure beyond the gate and walk toward the marked archive passage | There is someone here worth reaching |
+| Experience one redirect | The doorway returns the hero beside the distinctive red book; the camera and a brief trail make the return obvious | The passage loops rather than progressing |
+| Receive help | The visible Oracle reacts and addresses the hero automatically after the first redirect | The voice belongs to someone in the scene; repeated attempts are unnecessary |
+| Trace the wrong destination | A highlighted link runs from the passage's anchor back to the entrance; inspecting it exposes the assigned target | The route has an understandable cause |
+| Change the route | Use a separate interaction to select the archive endpoint and confirm the change; show the link switch and the gate open | The player deliberately changes a rule rather than completing a reading task |
+| Meet the Oracle | Cross to the figure and begin a direct conversation | The section pays off its original promise |
+| Establish the next problem | The Oracle shows a relevant containment record; a specific blocked operation motivates the later inner archive encounter | The next action grows out of an answer |
 
-**AVATAR:** "Same shelf. Same damaged book. The exit routed me back to the entry point."
+This is a short introduction to a system rule. It does not need repeated blind attempts, a timer, an unexplained symbol code or several similar terminals. After the first repeat, movement back through the same route should add no mandatory story step.
 
-**UNKNOWN SIGNAL:** "Your position changed. Your destination did not."
+Reading a page can reveal a clue; it must not itself commit the route change. On cancellation, the route stays unchanged. Restoring a checkpoint should preserve the discovered clue, confirmed route and meeting state without demanding another loop.
 
-**AVATAR:** "Identify yourself."
+## Permission logic to make explicit
 
-**UNKNOWN SIGNAL:** "The index calls me the Broken Oracle. The channel gives me very little room to dispute it."
+Proposed local rule: visitors can select the endpoint assigned to their own route. The Engine currently points that endpoint back to ENTRY. The Oracle can inspect the assignment but cannot edit a visitor's route from their restricted archive account. The hero can change their own assignment once the Oracle identifies a valid ARCHIVE endpoint.
 
-**AVATAR:** "Can you open a route?"
+This is a limited exploit. It does not reuse the consumed sentinel token, grant general root access or depend on being 16-bit. Show the rule in concise inspection output and demonstrate its physical consequence.
 
-**ORACLE:** "I can trace its binding. I cannot write to it. You reached this channel from outside the library's process. Try what I cannot."
+## Draft first exchange
 
-**SYSTEM:** `ANCHOR BINDING FOUND. Interrupt the marked anchor to resolve the loop.`
+Deliver the voice from the visible figure or a clear projection of that figure. An unrelated terminal should not stand in for the promised meeting.
 
-**Objective:** `Trace the loop anchor and interrupt its binding.`
+**AVATAR:** "Same red book. The passage sent me back."
 
-## Sample containment response
+**ORACLE:** "It sends every visitor back. Look at the line under the floor. It ends where you started."
 
-**SYSTEM:** `UNAUTHORIZED WRITE. Containment warden dispatched.`
+**AVATAR:** "You can see the route. Can you change it?"
 
-**AVATAR:** "The route is open. So is the audit log."
+**ORACLE:** "Read access only. Your visitor slot is writable. I can give you the archive address."
 
-**ORACLE:** "Then keep moving. It has your last write location."
+**ROUTE INSPECTION:** `CURRENT TARGET: ENTRY. ARCHIVE ENDPOINT VERIFIED.`
 
-This response gives the warden a reason to engage. Its actual pursuit and encounter should communicate that behavior visibly.
+**Objective:** `Change your route's destination to ARCHIVE.`
 
-## Mission handoff to write after the Oracle is defined
+The route controls now accept a deliberate action. Advancing the final dialogue page only makes the control available.
 
-The final conversation must give the player:
+**After the player confirms:** `ROUTE UPDATED: ARCHIVE. LOOP DETACHED.`
 
-1. A reason the other gods need intervention.
-2. A reason the hero can enter their prisons and attempt that intervention.
-3. One specific next destination, with a readable objective.
-4. A reason the Oracle needs or wants this outcome.
+The link changes direction, the return effect disappears and the gate opens. The Oracle turns toward the newly open path.
 
-Do not claim that the Oracle is a regular god awaiting the same rescue. Do not trigger a 32-bit upgrade here. The proposed 16-bit hero / 8-bit host contrast belongs to the next prison experiment, not to this library.
+**ORACLE:** "There. Come through while the route holds."
 
-Potential system wording for that later handoff: `REMOTE SANDBOX: legacy fidelity. Caller capabilities retained.` It describes entry behavior, not an automatic damage bonus.
+Use that last line only if a later containment response visibly threatens the route; otherwise use "There. The archive can receive you now." Do not imply a hidden countdown when none exists.
 
-## Graybox requirements
+## Draft meeting and payoff
 
-Use the existing 16-bit profile and placeholder shapes. Include an unmistakable repeated landmark, one clearly marked anchor, a visually altered passage after interruption, a safe dialogue area, and enough space for readable combat. Prevent aimless loops by showing a concise objective after the first repeat. Optional records can deepen the technological lore without hiding mandatory instructions.
+The Oracle should be directly approachable at the destination. Stage the conversation around a visible record that matches a mark or identifier introduced in the personal prison. The hero can point to evidence rather than receive an unexplained lore speech.
 
-Playtest the delivered section's state transitions and resume behavior before extending the inner archive. Production assets remain unnecessary for this graybox milestone.
+**AVATAR:** "That mark was on my cell."
+
+**ORACLE:** "Your containment record. The entry now says the cell is empty. It still lists you inside the Engine."
+
+**AVATAR:** "Then where is the way out?"
+
+**ORACLE:** "The external route is locked from here. I can show you which process owns the lock."
+
+**AVATAR:** "Show me."
+
+The Oracle then opens a small index: the hero's cell is marked EMPTY; several other quarantines remain OCCUPIED. This is evidence the player can see, and the first indication of the wider cast rather than an immediate assignment to rescue everyone.
+
+**AVATAR:** "Those are other cells."
+
+**ORACLE:** "Other gods. Their status still updates. I can read it. I cannot get a message through."
+
+**AVATAR:** "But you reached me."
+
+**ORACLE:** "You reached the archive. That gave us a channel. Tell me how you left your cell."
+
+The meeting now provides two concrete discoveries: escape did not grant external access, and other gods remain confined in separate locations. It also gives the Oracle a personal reason to listen to the hero. Their working relationship begins with exchanging evidence and experience, before the later rescue commitment.
+
+The next inner archive section needs a concrete design for the controlling process, warden and relic before any of them is promised as an actionable objective. A warden should respond to an actual protected operation. A relic should enable a stated action. Keep either only if it serves this chapter; a place on the earlier task list is not sufficient reason to add it. Avoid announcing a dispatch and then spawning nothing.
+
+## Later handoff to the gods' prisons
+
+After the fuller Oracle encounter, show evidence of other occupied quarantines and establish why reaching one helps both its captive and the hero's larger goal. If the partitioned-authority idea in STORY-SPINE.md is adopted, demonstrate the missing authority before asking the hero to restore it.
+
+The chapter handoff must name one reachable prison, identify what the hero can attempt there and give the Oracle a reason to support that attempt. The first god's identity and prison rule remain to be chosen. Do not classify the Oracle as the first ordinary god rescue. The proposed 16-bit hero in later 8-bit prisons belongs to that subsequent experiment.
+
+## Acceptance for the story revision
+
+A new player should be able to answer these without rereading a log:
+
+1. Why did I come to the library?
+2. Who am I trying to reach, and where are they?
+3. Why did the doorway return me to the entrance?
+4. What did I change, and why was I able to change it?
+5. What did meeting the Oracle tell me, and what do I want to do next?
+
+Graybox a distinct figure, a visible route connection, one repeated landmark and a direct meeting space. Label any development stopping point outside the fictional system dialogue. The first revised delivery should end after a satisfying exchange with the Oracle, with its current content boundary clearly identified.
