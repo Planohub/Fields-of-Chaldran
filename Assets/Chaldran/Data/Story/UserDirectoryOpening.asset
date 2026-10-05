@@ -29,4 +29,4 @@ MonoBehaviour:
   - beat: 4
     objective: "Reach the library threshold north of the marker."
     dialogue: {fileID: 11400000, guid: 78d3fb491a0e5d7d84ea9db7c7b15524, type: 2}
-  completedObjective: "The Broken Oracle's library is located. Its quarantine is sealed."
+  completedObjective: "Library located. Press E at the threshold to mount /oracle/archive."

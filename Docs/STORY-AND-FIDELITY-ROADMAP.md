@@ -1,6 +1,6 @@
 # Story and fidelity direction
 
-Recorded from Shawn's October 4, 2026 direction. This document supersedes earlier suggestions to soften the computer terminology or treat the Oracle as an ordinary imprisoned god. It is design groundwork, not a claim that the library or mixed-fidelity rendering is playable.
+Recorded from Shawn's October 4, 2026 direction. This document supersedes earlier suggestions to soften the computer terminology or treat the Oracle as an ordinary imprisoned god. The first library opening is now playable; its delivery and pending Unity checks are recorded in [ORACLE-LIBRARY-PLAYTEST.md](ORACLE-LIBRARY-PLAYTEST.md). The full Oracle encounter and mixed-fidelity renderer remain upcoming.
 
 ## Established direction
 
@@ -43,13 +43,13 @@ Before implementing the first other god's prison, separate:
 
 Prototype a shared final canvas with independently rendered or quantized world and hero layers. Maintain the same camera position, viewport, collision scale, aiming coordinates, and consistent foreground occlusion. Trees/walls must still occlude the higher-fidelity hero correctly. Do not simply put the hero on top of everything. Compare separate camera buffers with a shared high-resolution buffer plus selective world quantization before choosing the production method.
 
-Use stable chapter/location IDs for future saves. Preserve the numeric meaning of existing PresentationTier values and the current version-2 checkpoint. That enum currently identifies the tutorial/overland profile, not literal hardware bitness. Introduce an explicit migration when dungeon state and separate hero/host fidelity are added. Returning from a prison must retain the hero's unlocked fidelity and capabilities.
+Use stable chapter/location IDs for future saves. Preserve the numeric meaning of existing PresentationTier values. Version-3 checkpoints now distinguish User Directory and Oracle library and migrate valid version-1/2 saves. That enum currently identifies the tutorial/overland profile, not literal hardware bitness. Add a further explicit migration when broader dungeon state and separate hero/host fidelity are introduced. Returning from a prison must retain the hero's unlocked fidelity and capabilities.
 
 ## Delivery order
 
-1. **Adopt the tested Unity 6.6 copy.** Shawn completed the current game in 6.6 with no Console errors. Keep the reported exit crash open for diagnosis; collect the exact patch and actual migration changes, verify a Windows build, and adopt the migration in its own commit. Story development can proceed on the active 6.6 copy. See UNITY-6.6-UPGRADE.md.
-2. **Oracle chapter writing.** Resolve what the Oracle knows, what prevents communication, and how the encounter leads to the rescue mission. Review the draft in ORACLE-LIBRARY-DRAFT.md.
-3. **Playable 16-bit library.** Graybox a compact loop, one anchor, a permission barrier, the Oracle encounter, and the warden/relic sequence. Extend saves before expecting persistent dungeon progress. Keep the first implementation small.
+1. **Unity 6.6 adopted.** The user-tested migration to **6000.6.4f1** is committed separately on the shared branch. Continue from the upgraded copy. Keep the reported exit error open for diagnosis and verify a Windows build. See UNITY-6.6-UPGRADE.md.
+2. **First Oracle contact delivered; inner archive writing next.** The opening establishes a restricted channel and an anchor the hero can interrupt. Resolve the Oracle's specific limitation, motivation, final outcome and wider rescue handoff before building the full encounter. Review ORACLE-LIBRARY-DRAFT.md.
+3. **First 16-bit library section delivered; playtest next.** The loop, anchor, physical barrier, restricted contact and landing have version-3 checkpoint continuity. Run ORACLE-LIBRARY-PLAYTEST.md, then build the inner archive and warden/relic sequence.
 4. **First mixed-fidelity experiment.** Use a disposable 8-bit host room with the 16-bit hero. Verify silhouette/detail, occlusion, mouse aim, dialogue, audio, enter/exit, and continue. Add one meaningful permission advantage.
 5. **First god rescue.** Choose the god and their specific prison restriction with Shawn; connect that restriction to their identity. Reuse the presentation and save foundation rather than repeating the Oracle chapter.
 6. **Opening expansion and animation.** Turn the personal prison into a purposeful sequence, with visible sword/block actions. Connect what it teaches to the permission mechanics used later. Keep the fast retro dialogue and readable prompts.

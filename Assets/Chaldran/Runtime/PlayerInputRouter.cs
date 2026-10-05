@@ -72,7 +72,7 @@ namespace Chaldran
             run.Stats.RegenerationSuppressed = run.Combat.IsBlocking;
             if (interact.WasPressedThisFrame())
             {
-                if (run.IsOverland && run.Story.CompletedSteps == 0) run.BeginStoryBeat(DirectoryBeat.Arrival);
+                if (run.NeedsIntroduction) run.BeginIntroduction();
                 else run.Interactor.TryInteract();
                 if (!run.IsActive) return;
             }

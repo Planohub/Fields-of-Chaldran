@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0b3170575d52a5b6fdf7bf4bae2bbe, type: 3}
+  m_Name: OracleLibraryOpening
+  m_EditorClassIdentifier: Chaldran.Runtime::Chaldran.LibraryStoryDefinition
+  questTitle: "TRACE /oracle/archive"
+  objectives:
+  - "Read the archive mount output."
+  - "Test the blue virtualized route at the east end of the corridor."
+  - "Probe the Oracle channel at the gold marker."
+  - "Interrupt the marked loop anchor binding."
+  - "Cross the released barrier and inspect the archive landing."
+  completedObjective: "Route resolved. Oracle channel established. Inner archive is the next section."
+  arrival: {fileID: 11400000, guid: 3e36bc2bb8e65bc69ae308b5e6113384, type: 2}
+  contact: {fileID: 11400000, guid: c9972d6860485211b6731f1547f59c69, type: 2}
+  anchor: {fileID: 11400000, guid: b80c5dcc4d18559bb7ffbf3b372fa84f, type: 2}
+  route: {fileID: 11400000, guid: 30c8c73bfb2054ab8c1ea4162becc1e8, type: 2}

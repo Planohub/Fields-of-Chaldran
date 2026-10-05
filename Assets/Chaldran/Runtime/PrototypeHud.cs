@@ -71,7 +71,7 @@ namespace Chaldran
             RectTransform directive = Panel("Directive", root, new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -24), new Vector2(580, 120), panelColor);
             directiveRect = directive;
             Text("Directive heading", directive, new Vector2(14, -12), new Vector2(552, 24), 16,
-                run.IsOverland ? run.StoryDefinition.questTitle : "CURRENT DIRECTIVE", new Color(0.89f, 0.73f, 0.44f));
+                run.QuestTitle, new Color(0.89f, 0.73f, 0.44f));
             objective = Text("Objective", directive, new Vector2(14, -44), new Vector2(552, 64), 21, "", ink);
 
             RectTransform enemy = Panel("Enemy status", root, Vector2.one, Vector2.one, new Vector2(-24, -24), new Vector2(240, 76), panelColor);
@@ -156,7 +156,7 @@ namespace Chaldran
                 dialogueControls.text = $"{session.LineIndex + 1} / {session.LineCount}    CLICK / E / ENTER: "
                     + (run.Dialogue.Reveal.Complete ? "next" : "show page") + "    ESC: close";
             }
-            prompt.text = talking ? "" : run.IsOverland && run.Story.CompletedSteps == 0 ? "[E] Take in the changed world"
+            prompt.text = talking ? "" : run.NeedsIntroduction ? run.IsLibrary ? "[E] Read archive mount output" : "[E] Take in the changed world"
                 : run.Interactor.Target != null ? run.Interactor.Target.Prompt : "";
             message.text = Time.unscaledTime < run.MessageUntil ? run.Message : "";
             noticePanel.SetActive(!talking && !string.IsNullOrEmpty(message.text));
@@ -186,7 +186,7 @@ namespace Chaldran
                 overlayBody.text = run.IsTransitioning ? "Your personal containment has ended.\nThe User Directory is resolving."
                     : (!run.IsOverland && run.Progress.Complete) ? "Quarantine Trial complete.\nPress ENTER to retry."
                     : run.IsPaused ? "Press ESC to resume.\nC resumes your checkpoint; F5 starts a new trial."
-                    : run.IsOverland ? "The divine signal has faded.\nPress ENTER to restore the overland checkpoint."
+                    : run.IsOverland ? "The divine signal has faded.\nPress ENTER to restore the journey checkpoint."
                     : "The Engine has reasserted containment.\nPress ENTER to retry the trial.";
             }
             if (arrivalCurtain != null)

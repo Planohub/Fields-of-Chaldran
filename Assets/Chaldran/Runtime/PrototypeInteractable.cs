@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace Chaldran
 {
-    public enum TrialInteraction { Anomaly, RestorationRelay, WriteAccess, Barrier, Exit, Checkpoint, Landmark, SignalRecord, LibraryThreshold }
+    public enum TrialInteraction { Anomaly, RestorationRelay, WriteAccess, Barrier, Exit, Checkpoint, Landmark, SignalRecord, LibraryThreshold,
+        OracleChannel, LoopAnchor, ArchiveLanding }
 
     public sealed class PrototypeInteractable : MonoBehaviour
     {
@@ -19,11 +20,16 @@ namespace Chaldran
             {
                 switch (Kind)
                 {
-                    case TrialInteraction.Checkpoint: return run.Story.CompletedSteps <= 1
+                    case TrialInteraction.Checkpoint: return run.IsLibrary ? "[E] Commit archive checkpoint" : run.Story.CompletedSteps <= 1
                         ? "[E] Read the directory waystone" : "[E] Save at the directory waystone";
                     case TrialInteraction.Landmark: return "[E] Read the library route marker";
                     case TrialInteraction.SignalRecord: return "[E] Read the damaged record";
-                    case TrialInteraction.LibraryThreshold: return "[E] Examine the compressed library threshold";
+                    case TrialInteraction.LibraryThreshold: return run.Story.Complete ? "[E] Mount /oracle/archive"
+                        : "[E] Examine the compressed library threshold";
+                    case TrialInteraction.OracleChannel: return "[E] Probe the restricted Oracle channel";
+                    case TrialInteraction.LoopAnchor: return run.Library.AnchorInterrupted ? "[E] Inspect interrupted anchor"
+                        : "[E] Interrupt the loop anchor binding";
+                    case TrialInteraction.ArchiveLanding: return "[E] Inspect the resolved archive route";
                     case TrialInteraction.Anomaly: return "[E] Recover the anomalous weapon";
                     case TrialInteraction.RestorationRelay:
                         return Time.time < nextRestore ? "Restoration relay recharging" : "[E] Restore Essence and Resonance";
@@ -86,7 +92,8 @@ namespace Chaldran
                     run.BeginTransition();
                     break;
                 case TrialInteraction.Checkpoint:
-                    if (run.Story.CompletedSteps <= 1) run.BeginStoryBeat(DirectoryBeat.Waystone);
+                    if (run.IsLibrary) run.SaveCheckpoint();
+                    else if (run.Story.CompletedSteps <= 1) run.BeginStoryBeat(DirectoryBeat.Waystone);
                     else run.SaveCheckpoint();
                     break;
                 case TrialInteraction.Landmark:
@@ -96,7 +103,17 @@ namespace Chaldran
                     run.BeginStoryBeat(DirectoryBeat.SignalRecord);
                     break;
                 case TrialInteraction.LibraryThreshold:
-                    run.BeginStoryBeat(DirectoryBeat.LibraryThreshold);
+                    if (run.Story.Complete) run.EnterLibrary();
+                    else run.BeginStoryBeat(DirectoryBeat.LibraryThreshold);
+                    break;
+                case TrialInteraction.OracleChannel:
+                    run.BeginLibraryBeat(LibraryBeat.OracleContact);
+                    break;
+                case TrialInteraction.LoopAnchor:
+                    run.BeginLibraryBeat(LibraryBeat.AnchorInterrupted);
+                    break;
+                case TrialInteraction.ArchiveLanding:
+                    run.BeginLibraryBeat(LibraryBeat.RouteReached);
                     break;
             }
             run.NotifyChanged();

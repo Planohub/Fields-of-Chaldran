@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e3baa961d25972983325a6f6a84961, type: 3}
+  m_Name: LibraryOracleContact
+  m_EditorClassIdentifier: Chaldran.Runtime::Chaldran.DialogueDefinition
+  lines:
+  - speaker: "AVATAR"
+    text: "Same red index book. The corridor resolved to its entry address."
+  - speaker: "UNKNOWN SIGNAL"
+    text: "Your position changed. Your destination did not."
+  - speaker: "AVATAR"
+    text: "Identify yourself."
+  - speaker: "ORACLE"
+    text: "The index calls me the Broken Oracle. This channel gives me little room to dispute it."
+  - speaker: "AVATAR"
+    text: "Can you open the route?"
+  - speaker: "ORACLE"
+    text: "I can trace the binding. I cannot write to it. You came from outside this archive process. Try what I cannot."
+  - speaker: "TRACE OUTPUT"
+    text: "ANCHOR BINDING FOUND. Interrupt the marked anchor to resolve the loop."

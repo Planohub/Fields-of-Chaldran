@@ -8,9 +8,9 @@ The user tested the quarantine trial, graphics/sound transition, Path to the Ora
 
 The Oracle is distinct from the other gods. Keep the Oracle library at 16-bit; the broader call to free the other gods follows that encounter. Later 8-bit god prisons with a visiting 16-bit hero are a proposed next experiment. Do not immediately advance to 32-bit. Keep hacker language and simulation jargon prominent. Continue grayboxing.
 
-See [the delivery roadmap](STORY-AND-FIDELITY-ROADMAP.md), [Oracle chapter draft](ORACLE-LIBRARY-DRAFT.md), and [isolated Unity 6.6 upgrade steps](UNITY-6.6-UPGRADE.md). The next delivery order is an upgrade trial, Oracle writing/graybox, then a mixed-fidelity proof. Opening expansion and avatar/sword animation remain on the roadmap.
+See [the delivery roadmap](STORY-AND-FIDELITY-ROADMAP.md), [Oracle chapter draft](ORACLE-LIBRARY-DRAFT.md), and [isolated Unity 6.6 upgrade steps](UNITY-6.6-UPGRADE.md). The Unity migration and first library graybox are now delivered; the next order is library playtest, inner archive writing/encounter, then a mixed-fidelity proof. Opening expansion and avatar/sword animation remain on the roadmap.
 
-The 6.6 gameplay trial is now user-tested through its ending with no Console errors. An error dialog on Editor exit remains unresolved. Use the upgraded copy for development and preserve the original as a fallback. Exact patch/settings migration and Windows build verification remain to be collected.
+The 6.6 gameplay trial is now user-tested through its ending with no Console errors. An error dialog on Editor exit remains unresolved. Use the upgraded copy for development and preserve the original as a fallback. The actual migration is committed on the shared branch: Unity **6000.6.4f1**, revision **12bfff696524**. The new library playtest and Windows build verification remain pending.
 
 ## Avatar animation
 
@@ -28,4 +28,6 @@ Keep the opening's NES-style top text box, quick letter reveal, sound, and insta
 
 ## Compressed library
 
-The User Directory currently leads to the sealed threshold. Build the library's spatial loop, breakable anchor, permission barrier, relic, mechanical warden, and distinct Oracle encounter after the writing pass. The Oracle's precise outcome remains a story decision; do not assume the same rescue as the other gods. Extend saves to its world state and keep visual-tier progress separate from divine advancement. The library remains 16-bit.
+The User Directory now mounts a playable 16-bit library opening: corridor redirect, repeated book, restricted Oracle contact, anchor interruption, physical barrier release and archive landing. Version-3 checkpoints retain the library scene and route state. Follow [the acceptance checks](ORACLE-LIBRARY-PLAYTEST.md).
+
+Next build the inner archive, define the relic and mechanical warden encounter, and write the Oracle outcome and wider mission handoff. The Oracle's precise outcome remains a story decision; do not assume the same rescue as the other gods. Keep visual-tier progress separate from divine advancement. The library remains 16-bit.

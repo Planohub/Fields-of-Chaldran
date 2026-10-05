@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5e3baa961d25972983325a6f6a84961, type: 3}
-  m_Name: DirectorySignalRecord
+  m_Name: LibraryAnchorInterrupted
   m_EditorClassIdentifier: Chaldran.Runtime::Chaldran.DialogueDefinition
   lines:
-  - speaker: "DAMAGED RECORD"
-    text: "QUARANTINE INDEX ... BROKEN ORACLE ... LIBRARY ... [record incomplete]."
+  - speaker: "ANCHOR CONSOLE"
+    text: "WRITE REQUEST: interrupt route binding. Caller permission accepted."
   - speaker: "AVATAR"
-    text: "Another quarantine. A restricted signal somewhere beyond this field."
-  - speaker: "DAMAGED RECORD"
-    text: "Divine signal: present. Route reference: northeast marker."
-  - speaker: "AVATAR"
-    text: "If the Oracle is still there, I may not have to understand this place alone."
+    text: "The redirect points here. Terminate the binding."
+  - speaker: "ANCHOR CONSOLE"
+    text: "BINDING INTERRUPTED. Route resolved. Audit event queued."
+  - speaker: "ORACLE"
+    text: "The archive can address its inner route again. Follow it. My channel ends before yours does."

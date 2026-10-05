@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Chaldran/Scenes/OverlandPrototype.unity
     guid: 6578c5bf25f4599f8d9862b5b0325bef
   - enabled: 1
+    path: Assets/Chaldran/Scenes/OracleLibraryPrototype.unity
+    guid: 39db1fb0a6b6591db0e3178dcfaa3052
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   m_configObjects:

@@ -10,14 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5e3baa961d25972983325a6f6a84961, type: 3}
-  m_Name: DirectorySignalRecord
+  m_Name: LibraryArrival
   m_EditorClassIdentifier: Chaldran.Runtime::Chaldran.DialogueDefinition
   lines:
-  - speaker: "DAMAGED RECORD"
-    text: "QUARANTINE INDEX ... BROKEN ORACLE ... LIBRARY ... [record incomplete]."
+  - speaker: "MOUNT OUTPUT"
+    text: "MOUNT /oracle/archive: granted. Host fidelity: resolved. Route integrity: unresolved."
   - speaker: "AVATAR"
-    text: "Another quarantine. A restricted signal somewhere beyond this field."
-  - speaker: "DAMAGED RECORD"
-    text: "Divine signal: present. Route reference: northeast marker."
-  - speaker: "AVATAR"
-    text: "If the Oracle is still there, I may not have to understand this place alone."
+    text: "The archive accepted my address. That blue route is still virtualized. I should test where it sends me."

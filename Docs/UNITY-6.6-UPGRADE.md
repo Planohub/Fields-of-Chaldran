@@ -1,14 +1,22 @@
 # Test Unity 6.6 on a project copy
 
-Decision recorded October 4, 2026: recommend a trial upgrade while the project is still grayboxing. The checked-in project currently specifies **6000.5.6f1**. This document does not perform an Editor migration or establish compatibility.
+## Current status — migration complete
+
+The shared branch now contains the actual user-tested migration to **6000.6.4f1**, revision **12bfff696524**, in commit `2518a7c67d40afa46dd3de678a7fcb4c424dc0a3`. Continue in `F:\GameProjects\Fields of Chaldran - Unity66-Test` and pull future gameplay changes there. There is no need to repeat the copy/upgrade steps below. The original 6.5 project and Editor can remain a fallback.
+
+Shawn completed the preceding content with no Console errors. The reported Editor exit error, EditMode results and Windows build remain unverified. The first Oracle library section is a separate gameplay change and needs its own [playtest](ORACLE-LIBRARY-PLAYTEST.md).
+
+## Earlier upgrade procedure
+
+The remaining instructions record the October 4 trial procedure, when the project was still at **6000.5.6f1**. They are retained for reference, rather than as a task to repeat.
 
 ## User's 6.6 playtest result
 
-Shawn reports completing the current game through its ending in the upgraded project copy, with expected behavior and no Console errors. He also reports an Editor error/crash dialog on exit. Record the gameplay playtest as successful and the shutdown issue as unresolved; the dialog alone does not identify the cause. The exact 6000.6 patch, migrated package/settings changes, EditMode results, and Windows build results have not yet been supplied.
+Shawn reports completing the current game through its ending in the upgraded project copy, with expected behavior and no Console errors. He also reports an Editor error/crash dialog on exit. Record the gameplay playtest as successful and the shutdown issue as unresolved; the dialog alone does not identify the cause. The patch and actual migrated project files have since been supplied and committed. EditMode and Windows build results remain pending.
 
 Use the upgraded copy as the active development folder. Renaming it is optional. Keep the original 6.5 project and Editor as a fallback until the exit behavior and a Windows build are checked. Avoid developing independently in both copies.
 
-Before syncing future gameplay changes, run these read-only commands from the upgraded project's PowerShell window:
+For later sync checks, these read-only commands identify the active project and branch:
 
 ```powershell
 git status --short
@@ -16,7 +24,7 @@ git branch --show-current
 Get-Content .\ProjectSettings\ProjectVersion.txt
 ```
 
-Use the results to preserve and review the actual migration changes. Do not invent the Editor revision or overwrite its generated project version from this authoring workspace. Publish the migration separately and integrate it into the shared development branch before expecting the repository's Editor version to match the upgraded working copy.
+The actual migration is already integrated. Review and preserve any new local changes before pulling gameplay updates. Keep the generated project version at the verified Editor revision.
 
 For a repeated exit crash, stop Play Mode, save, exit normally, and retain the Editor log before another launch. In 6.6 the default is the project's Logs/Editor.log; Console → More (⋮) → Open Editor Log finds the active file. A global-log configuration instead uses %LOCALAPPDATA%\Unity\Editor\Editor.log on Windows. Crash files are normally under %TMP%\Unity\Editor\Crashes. Unity 6000.6.3f1 release notes list fixes for particular Editor-quit crashes, but they do not establish that Shawn encountered one of those cases. Check the exact patch and log before diagnosing or selecting a fix.
 

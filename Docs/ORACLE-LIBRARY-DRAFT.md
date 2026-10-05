@@ -1,6 +1,6 @@
 # Broken Oracle library: chapter groundwork
 
-Draft for review. Scene actions and dialogue below are proposals; they do not establish the Oracle's origin, divine classification, or the next god's identity. The library stays at 16-bit, including its sound and the hero. The larger mission to free other gods begins after this encounter.
+The mount, corridor loop, restricted first contact, anchor and archive landing are now implemented in the first playable section. See [delivery/playtest notes](ORACLE-LIBRARY-PLAYTEST.md). The inner archive, warden, relic and mission handoff below remain proposals; they do not establish the Oracle's origin, divine classification, or the next god's identity. The library stays at 16-bit, including its sound and the hero. The larger mission to free other gods begins after this encounter.
 
 ## Chapter purpose
 
@@ -10,11 +10,12 @@ Move from following a damaged record to choosing an active mission. Give the Ora
 
 | Beat | Player action | Story/feedback | Proposed checkpoint boundary |
 | --- | --- | --- | --- |
-| Mount the library | Override the threshold after the existing approach | Access is granted, but the interior route is virtualized | Entrance |
-| Encounter the loop | Walk through a corridor and return to its start | A clear repeated landmark and changed system output establish the loop | No progress award for repetition |
-| Receive a signal | Inspect a responding terminal or book | Oracle makes contact; the channel is restricted | Completed conversation |
-| Interrupt the anchor | Follow its binding and disable it | The corridor becomes a stable route; the warden detects the write | Anchor state |
-| Reach the restricted archive | Cross the now-open route | Meet the Oracle; establish their specific limitation | Encounter state |
+| Mount the library (implemented) | Use the completed threshold after the existing approach | Access is granted, but the interior route is virtualized | Entrance |
+| Encounter the loop (implemented) | Walk through a corridor and return to its start | A clear repeated landmark and changed system output establish the loop | No progress award for repetition |
+| Receive a signal (implemented) | Inspect a responding terminal or book | Oracle makes contact; the channel is restricted | Completed conversation |
+| Interrupt the anchor (implemented) | Follow its binding and disable it | The corridor becomes a stable route; an audit is queued, with no warden spawned yet | Anchor state |
+| Reach the archive landing (implemented) | Cross the now-open route | Contact holds; inner archive remains the next section | Landing state |
+| Enter the inner archive (planned) | Continue beyond the landing | Establish the Oracle's specific limitation | Encounter state |
 | Break the active restraint | Resolve a concise warden/permission encounter | Enable access to the relic and the chapter's agreed Oracle outcome | Warden and relic state |
 | Accept the wider objective | Finish the Oracle conversation | Other gods' prisons become the next actionable mission | Mission unlocked; return route available |
 
@@ -69,4 +70,4 @@ Potential system wording for that later handoff: `REMOTE SANDBOX: legacy fidelit
 
 Use the existing 16-bit profile and placeholder shapes. Include an unmistakable repeated landmark, one clearly marked anchor, a visually altered passage after interruption, a safe dialogue area, and enough space for readable combat. Prevent aimless loops by showing a concise objective after the first repeat. Optional records can deepen the technological lore without hiding mandatory instructions.
 
-The next playable deliverable should verify this chapter's state transitions and resume behavior before importing production assets.
+Playtest the delivered section's state transitions and resume behavior before extending the inner archive. Production assets remain unnecessary for this graybox milestone.

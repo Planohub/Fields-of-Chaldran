@@ -31,9 +31,9 @@ def verify():
         file_ids = re.findall(r'^--- !u!\d+ &(\d+)', scene, re.M)
         assert len(file_ids) == len(set(file_ids)), f'Duplicate scene document IDs: {path}'
     build_settings = (ROOT / 'ProjectSettings/EditorBuildSettings.asset').read_text()
-    for name in ['QuarantinePrototype', 'OverlandPrototype']:
+    for name in ['QuarantinePrototype', 'OverlandPrototype', 'OracleLibraryPrototype']:
         assert f'path: Assets/Chaldran/Scenes/{name}.unity' in build_settings
-    for name, cell, buffer in [('QuarantinePresentation',16,(256,144)),('OverlandPresentation',32,(512,288))]:
+    for name, cell, buffer in [('QuarantinePresentation',16,(256,144)),('OverlandPresentation',32,(512,288)),('LibraryPresentation',32,(512,288))]:
         profile = (TRIAL / 'Data' / (name + '.asset')).read_text()
         for field,value in [('cellPixels',cell),('bufferWidth',buffer[0]),('bufferHeight',buffer[1])]:
             assert f'  {field}: {value}\n' in profile
@@ -64,6 +64,22 @@ def verify():
     assert f'introduction: {{fileID: 11400000, guid: {intro_guid}, type: 2}}' in quarantine
     assert len(re.findall(r'^  - speaker:', intro, re.M)) == 2
 
+    library = (TRIAL / 'Data/Story/OracleLibraryOpening.asset').read_text()
+    assert len(re.findall(r'^  - "', library, re.M)) == 5, 'Library objective count changed'
+    for field in ['arrival', 'contact', 'anchor', 'route']:
+        identity = re.search(r'^  ' + field + r': \{fileID: 11400000, guid: ([0-9a-f]{32})', library, re.M).group(1)
+        path = Path(str(identities[identity])[:-5])
+        dialogue = path.read_text()
+        assert f'guid: {dialogue_script}' in dialogue
+        lines = re.findall(r'^  - speaker: (.+)\n    text: (.+)', dialogue, re.M)
+        assert 1 <= len(lines) <= 64
+        for speaker, text in lines:
+            assert json.loads(speaker).strip() and 0 < len(json.loads(text).strip()) <= 500
+    scene = (TRIAL / 'Scenes/OracleLibraryPrototype.unity').read_text()
+    identity = re.search(r'^guid: (\w+)', (TRIAL / 'Data/Story/OracleLibraryOpening.asset.meta').read_text(), re.M).group(1)
+    assert f'libraryStory: {{fileID: 11400000, guid: {identity}, type: 2}}' in scene
+    assert '  overland: 1\n' in scene and '  directoryStory: {fileID: 0}\n' in scene
+
     inputs = json.loads((ASSETS / 'PlayerControls.inputactions').read_text())['maps'][0]
     actions = {action['name']: action['id'] for action in inputs['actions']}
     assert len(actions) == len(inputs['actions']), 'Duplicate input action names'
@@ -89,7 +105,7 @@ def verify():
             samples = struct.unpack('<' + 'h' * clip.getnframes(), clip.readframes(clip.getnframes()))
             assert samples and max(abs(value) for value in samples) < 32767, f'Clipped audio: {path}'
     assert len(clips) == 15
-    print('PASS metadata, scenes/profiles/atlases, ordered story/dialogue references, retro introduction/typing cue, input IDs, and 15 audio clips.')
+    print('PASS metadata, three scenes/profiles, both chapter/dialogue references, atlases, retro cue, input IDs, and 15 audio clips.')
 
 
 if __name__ == '__main__':

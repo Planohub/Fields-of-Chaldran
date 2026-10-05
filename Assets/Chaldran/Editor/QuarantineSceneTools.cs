@@ -21,6 +21,13 @@ namespace Chaldran.Editor
             EditorSceneManager.OpenScene(JourneyStore.OverlandScene);
         }
 
+        [MenuItem("Fields of Chaldran/Open Oracle Library Preview")]
+        public static void OpenLibrary()
+        {
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            EditorSceneManager.OpenScene(JourneyStore.LibraryScene);
+        }
+
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
@@ -33,6 +40,18 @@ namespace Chaldran.Editor
         private static void DrawLayout(PrototypeBootstrap bootstrap, GizmoType type)
         {
             if (Application.isPlaying) return;
+            if (bootstrap.gameObject.scene.path == JourneyStore.LibraryScene)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawWireCube(Vector3.zero, new Vector3(25f, 17f, 0f));
+                Marker(new Vector3(-9,0), "Archive entry", Color.cyan);
+                Marker(new Vector3(-5,0), "Restricted Oracle channel", Color.yellow);
+                Marker(new Vector3(-1,0), "Loop anchor", Color.yellow);
+                Marker(new Vector3(1.5f,0), "Loop redirect", Color.blue);
+                Marker(new Vector3(3,0), "Anchor-owned barrier", Color.red);
+                Marker(new Vector3(6,0), "Resolved archive route", Color.green);
+                return;
+            }
             if (bootstrap.gameObject.scene.path == JourneyStore.OverlandScene)
             {
                 Gizmos.color = Color.green;
