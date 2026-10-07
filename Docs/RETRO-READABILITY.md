@@ -15,7 +15,7 @@ The current guard encounters and quest order stay as the small proof of concept.
 
 ## Unity playtest
 
-Update `codex/quarantine-trial-recovered`, open the trial, and press F5 if necessary to start fresh. The introduction should appear across the top. Verify that it types quickly, produces a comfortable sound, and keeps gameplay paused. Try click/Enter/E while typing: the first press must reveal only the current page. Verify a later press advances, Escape closes, and no sword attack occurs from a dialogue click. Check the last page cannot award or dismiss twice.
+Update `master`, open the trial, and press F5 if necessary to start fresh. The introduction should appear across the top. Verify that it types quickly, produces a comfortable sound, and keeps gameplay paused. Try click/Enter/E while typing: the first press must reveal only the current page. Verify a later press advances, Escape closes, and no sword attack occurs from a dialogue click. Check the last page cannot award or dismiss twice.
 
 Read the objective in the center, approach the anomaly, and verify its interaction bubble follows the object and stays inside the screen. Check objective changes/notices without scanning the corners. Repeat in overland, including saved story progression, rereading, cancel, C, and F5.
 

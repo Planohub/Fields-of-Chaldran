@@ -10,7 +10,7 @@ The initial profiles use the earlier 8-bit-style tutorial to 16-bit-style overla
 
 ## Play the transition
 
-Fetch and update `codex/quarantine-trial-recovered`. Open **Fields of Chaldran > Open Quarantine Trial** and press Play. The weapon, sentinel, token, and gate sequence is unchanged. Interact with the exit terminal after releasing the barrier. Movement locks for the short release transition; music fades down, then a separate overland scene appears with richer visuals and a new arrangement of the same musical motif.
+Fetch and update `master`. Open **Fields of Chaldran > Open Quarantine Trial** and press Play. The weapon, sentinel, token, and gate sequence is unchanged. Interact with the exit terminal after releasing the barrier. Movement locks for the short release transition; music fades down, then a separate overland scene appears with richer visuals and a new arrangement of the same musical motif.
 
 Your current Essence, Resonance, and weapon carry into the clearing. Resonance resumes its normal regeneration there; the transition does not heal you or spend extra resources. World scale, movement speed, interaction radius, and collision sizes remain the same across tiers. Burst and melee cooldowns reset when the new scene loads.
 

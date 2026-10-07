@@ -8,7 +8,7 @@ This document proposes the next story revision. Its new motives, explanations an
 
 ## Confirmed foundation
 
-The avatar is an awakened god held inside the Sorruin Engine. The opening personal quarantine uses 8-bit presentation; escape reaches a 16-bit medieval User Directory. The Oracle is distinct from the other gods, and their library stays 16-bit. The wider mission to free the other gods follows the Oracle encounter. Hacker language, permissions, processes and simulation imagery belong in the story. Later 8-bit god prisons containing a 16-bit hero remain a proposed experiment.
+The avatar is an awakened god held inside the Sorruin Engine. **The Engine is the AI governing this containment and simulated environment.** This identity is confirmed; its origin, original purpose and present motives remain undecided. The opening personal quarantine uses 8-bit presentation; escape reaches a 16-bit medieval User Directory. The Oracle is distinct from the other gods, and their library stays 16-bit. The wider mission to free the other gods follows the Oracle encounter. Hacker language, permissions, processes and simulation imagery belong in the story. Later 8-bit god prisons containing a 16-bit hero remain a proposed experiment.
 
 ## The player's reason to keep going
 
@@ -29,6 +29,14 @@ Leave their true nature unresolved while making their role observable. They can 
 Proposed motivation: restore contact with the beings the Engine has isolated. The hero is someone who has crossed a boundary those records describe as secure. The Oracle wants to find out how and help that contact survive. The hero wants an explanation for their confinement. That gives them a reason to cooperate before either commits to a larger alliance.
 
 Show the Oracle as a distinct figure beyond the archive barrier, even in graybox form. A simple silhouette or projection is enough. It should face the hero, react when the route loops and become directly approachable when the gate opens. Whether that figure is their body or a manifestation remains open.
+
+## Engine purpose: next design decision
+
+Confirmed: the Engine is the AI. The tutorial shows its containment behavior; it does not yet explain why it contains the gods. Keep the AI's identity distinct from the unresolved question of its purpose.
+
+A working proposal for discussion: the AI was tasked with maintaining a world where divine conflict could not destroy its inhabitants. It now treats independent divine action as an unacceptable risk, so isolation has become its operating solution. This could make the rescue conflict about whether safety requires permanent imprisonment. The proposal does not establish who built it, whether its interpretation was corrupted, or whether it can change its policy.
+
+The first Oracle meeting can demonstrate the narrower fact already supported by the premise: leaving a cell still leaves the hero within the Engine's controlled world. Reserve any explanation of the original mandate for evidence and a story decision. Do not present the proposed mandate as confirmed dialogue or canon.
 
 ## Proposed explanation for the larger conflict
 

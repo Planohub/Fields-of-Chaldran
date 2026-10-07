@@ -36,7 +36,7 @@ The sentinel is a small state machine: dormant, hunting, warning, recovery, defe
 
 ## Unity checks before merging
 
-1. Import with 6000.5.6f1. Confirm no compiler errors, missing scripts, missing font, or magenta sprites.
+1. Import with 6000.6.4f1. Confirm no compiler errors, missing scripts, missing font, or magenta sprites.
 2. Open QuarantinePrototype and run. Confirm HUD and all room objects render, and the six cues play at comfortable levels.
 3. Confirm movement speed is consistent on diagonals, sprint works, and boundaries/pillars stop the avatar.
 4. Press E away from objects: nothing should fire. Approach the anomaly: its prompt appears and E changes the objective. Check that walls prevent interaction through them.

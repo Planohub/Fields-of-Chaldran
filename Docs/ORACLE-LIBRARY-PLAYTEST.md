@@ -24,10 +24,12 @@ git status --short
 git branch --show-current
 ```
 
-If the working tree is clean and the branch is `codex/quarantine-trial-recovered`:
+If the working tree is clean, switch to the canonical branch and update:
 
 ```powershell
-git pull --ff-only
+git fetch origin --prune
+git switch master
+git pull --ff-only origin master
 ```
 
 Preserve local changes first. If the command cannot fast-forward, inspect the divergence before proceeding. No installer, package export/import, folder replacement or repeat Editor migration is needed. Open the project with **6000.6.4f1**.

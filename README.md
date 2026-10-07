@@ -1,6 +1,6 @@
 # Fields of Chaldran
 
-A 2D top-down RPG by Shawn Plano. An awakened god breaks the Sorruin Engine's cognitive restraints and eventually frees other quarantined gods. The development branch now includes the **Quarantine Trial**, its **8-bit → 16-bit transition**, the **User Directory approach**, and the **first playable Oracle library section**. The Oracle is distinct from the other gods; the wider rescue mission follows the full Oracle encounter.
+A 2D top-down RPG by Shawn Plano. An awakened god breaks the cognitive restraints imposed by the Sorruin Engine, the AI governing their containment and eventually frees other quarantined gods. The canonical `master` branch includes the **Quarantine Trial**, its **8-bit → 16-bit transition**, the **User Directory approach**, and the **first playable Oracle library section**. The Oracle is distinct from the other gods; the wider rescue mission follows the full Oracle encounter.
 
 ## Update through GitHub and PowerShell
 
@@ -12,10 +12,12 @@ git status --short
 git branch --show-current
 ```
 
-With a clean working tree on `codex/quarantine-trial-recovered`:
+With a clean working tree, switch to the canonical branch and update it:
 
 ```powershell
-git pull --ff-only
+git fetch origin --prune
+git switch master
+git pull --ff-only origin master
 ```
 
 Preserve any local changes before pulling. If the branch differs or Git reports divergence, resolve that situation before opening the updated project; do not discard work or force a reset. These changes are checked directly into the repository. No package installer or Unity package import is required.
@@ -94,3 +96,7 @@ The immediate priority is story clarity: give the hero a reason to seek the Orac
 After that meeting is clear, develop the inner archive, containment response, relic function and wider rescue handoff. Keep the library at 16-bit. The next rendering experiment follows the Oracle encounter.
 
 See the [current-state assessment](Docs/PROJECT-STATE-ASSESSMENT-2026-10-07.md), [story/fidelity roadmap](Docs/STORY-AND-FIDELITY-ROADMAP.md), [Oracle chapter draft](Docs/ORACLE-LIBRARY-DRAFT.md), [remaining milestones](Docs/NEXT-MILESTONES.md), [Unity migration record](Docs/UNITY-6.6-UPGRADE.md), [User Directory opening](Docs/USER-DIRECTORY-OPENING.md), [art handoff](Docs/ART-HANDOFF.md), [presentation progression](Docs/PRESENTATION-PROGRESSION.md), and [combat notes](Docs/QUARANTINE-TRIAL.md).
+
+## October 7 recovery and consolidation
+
+Consolidated the complete playable history onto `master`, the sole development branch. Removed obsolete Editor migration/fallback instructions; Unity **6000.6.4f1** is the active baseline until an explicit later upgrade. Recorded the confirmed story distinction: **the Sorruin Engine is the AI**; its original purpose and reason for containing the gods remain design questions. The clearer Oracle meeting remains the next gameplay revision. This cleanup changes documentation and branch organization, not gameplay.

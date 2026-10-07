@@ -18,7 +18,7 @@ The most useful next step is a focused story pass before adding a warden, relic,
 
 | Topic | Current status |
 | --- | --- |
-| Premise | The hero is an awakened god held by the Sorruin Engine, framed as a simulated computer environment. The opening personal quarantine leads into the shared User Directory. |
+| Premise | The hero is an awakened god held by the Sorruin Engine. The Engine is the AI governing the simulated environment; its deeper purpose remains undecided. The opening personal quarantine leads into the shared User Directory. |
 | Presentation | The personal prison is presented as 8-bit; the User Directory advances to 16-bit. Keep the Oracle library at 16-bit, including its hero and sound. |
 | Oracle | The Oracle is distinct from the other gods. Do not make them a routine rescue target or settle their exact nature by assumption. The wider call to free other gods follows the Oracle encounter. |
 | Tone | Keep the hacker, systems, and simulation language. Mandatory jargon should still tell the player what to do and what will happen. |
@@ -47,8 +47,7 @@ The most useful next step is a focused story pass before adding a warden, relic,
 
 5. **“Quarantine” remains a working term.** It is central to current code and docs. Earlier feedback singled out the name as something to revisit, while later discussion continued to use it. Treat the label as provisional until the opening story terminology is polished.
 
-6. **Some docs retain the old Editor baseline.** `README.md` and `UNITY-6.6-UPGRADE.md` name 6000.6.4f1 as current, while older verification instructions in `QUARANTINE-TRIAL.md` still say 6000.5.6f1. Label those checks as historical or update their active instructions.
-
+6. **Editor and branch cleanup resolved on October 7.** Unity 6000.6.4f1 is the sole active baseline. Obsolete migration and fallback instructions were removed, and the complete playable history was consolidated onto canonical `master`. Further upgrades require an explicit decision.
 7. **The proposed lore is not canon yet.** The story-spine document suggests the Engine partitions divine authority so the gods cannot act together. That is a promising explanation for the rescue arc, but it is a proposal; the Engine’s origin/motive, Oracle identity/motivation, relic, warden, and first rescued god remain open.
 
 ## Recommended work order
@@ -60,7 +59,7 @@ The most useful next step is a focused story pass before adding a warden, relic,
 5. **Then decide whether the inner archive needs a warden or relic.** Keep each only if it creates a meaningful obstacle or enables an action that the story needs.
 6. **Preserve saves if the beat order changes.** The library uses stable beat IDs and version-3 checkpoints. Changing what those beat values mean requires an explicit save migration; do not silently reinterpret existing progress.
 7. **After the story revision, test it in Unity 6.6.** Run the EditMode tests, verify dialogue cancellation and checkpoint continuation, then make and test a Windows build. Keep the reported Editor shutdown issue separate until there is a log that explains it.
-8. **Clean the project notes.** Resolve the 32/64-bit endpoint question and mark the old 6.5 instructions as historical. Keep the PowerShell/GitHub pull steps current.
+8. **Clean the project notes.** Resolve the 32/64-bit endpoint question and keep Unity 6000.6.4f1 as the active baseline. Keep the PowerShell/GitHub pull steps current.
 
 ## Immediate recommendation
 

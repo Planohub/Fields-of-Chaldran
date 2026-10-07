@@ -8,7 +8,7 @@ This milestone builds the approach to that library. The arrival thoughts, inscri
 
 ## Play
 
-Update `codex/quarantine-trial-recovered`. Complete the tutorial, or press C to resume the checkpoint you already made. A valid version-1 checkpoint starts this new story at arrival with its existing weapon, resources, and position. **Fields of Chaldran > Open Overland Preview** also opens the clearing directly; without a checkpoint it is an unlocked development preview.
+Update `master`. Complete the tutorial, or press C to resume the checkpoint you already made. A valid version-1 checkpoint starts this new story at arrival with its existing weapon, resources, and position. **Fields of Chaldran > Open Overland Preview** also opens the clearing directly; without a checkpoint it is an unlocked development preview.
 
 The opening dialogue starts after the arrival fade. E or Enter advances one page; Escape closes it. Movement, combat, regeneration, physics, and cooldown clocks pause while dialogue is open. Music continues. C, F5, and normal pause/retry inputs are held until the dialogue closes. The key that opens or finishes a conversation cannot also fire another interaction or attack in the same frame.
 
